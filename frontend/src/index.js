@@ -1,13 +1,19 @@
+// react
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+
+// app
 import App from './components/App'
-import registerServiceWorker from './registerServiceWorker';
-import { createStore } from 'redux'
-// import reducer from './reducers'
-import { Provider } from 'react-redux'
+import './index.css';
+
+// router
 import { BrowserRouter } from 'react-router-dom';
 
+// redux
+import { createStore } from 'redux'
+import reducer from './reducers'
+
+import { Provider } from 'react-redux'
 
 
 const store = createStore(
@@ -22,5 +28,4 @@ ReactDOM.render(
   document.getElementById('root')
 )
 
-registerServiceWorker()
 
