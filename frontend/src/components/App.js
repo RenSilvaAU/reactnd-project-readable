@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 
-import { addComment, addCategory, initCategories} from '../actions'
+import { initCategories, initPosts } from '../actions'
 
 import logo from '../logo.svg';
 import '../App.css';
@@ -16,20 +16,33 @@ import PostDetail from './PostDetail'
 class App extends Component {
 
   state={
-    s_categories: [],
-    s_comments: []
   }
 
   componentDidMount() {
-    const url = `${process.env.REACT_APP_BACKEND}/categories`;
+
+    // get categories
+    var url = `${process.env.REACT_APP_BACKEND}/categories`;
     console.log('fetching from url', url);
     fetch(url, { headers: { 'Authorization': 'whatever-you-want' }} )
       .then( (res) => { return(res.text()) })
       .then((data) => { 
         console.log('received data:',data);
         // this.setState({categories:JSON.parse(data).categories})
-        this.props.initCategories(JSON.parse(data).categories)
+        this.props.initCategories( JSON.parse(data).categories )
       });
+
+    // get posts
+    url = `${process.env.REACT_APP_BACKEND}/posts`;
+    console.log('fetching from url', url);
+    fetch(url, { headers: { 'Authorization': 'whatever-you-want' }} )
+      .then( (res) => { return(res.text()) })
+      .then((data) => { 
+        console.log('received data:',data);
+        // this.setState({categories:JSON.parse(data).categories})
+        this.props.initPosts( JSON.parse(data).posts )
+      });
+
+
   }
 
   // should list all available categories, which should link to a category view for that category
@@ -39,9 +52,7 @@ class App extends Component {
 
   render() {
 
-    const { categories, comments, addComment, addCategory, initCategories } = this.props;
-
-    console.log('Props', this.props)
+    const {  initCategories, initPosts} = this.props
 
     return (
       
@@ -96,15 +107,13 @@ class App extends Component {
 
 function mapDispatchToProps (dispatch) {
   return {
-
-    addComment: (data) => dispatch(addComment(data)),
-    addCategory: (data) => dispatch(addCategory(data)),
-    initCategories: (data) => dispatch(initCategories(data))
+    initCategories: (data) => dispatch(initCategories(data)),
+    initPosts: (data) => dispatch(initPosts(data))
   }
 }
-function mapStateToProps ({ s_categories, s_comments }) {
-  return { categories: s_categories,
-           comments: s_comments }
+
+function mapStateToProps () {
+  // left empty, as I will not need to access any props in this component
 }
 
 export default  connect(

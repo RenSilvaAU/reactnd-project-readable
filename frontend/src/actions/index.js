@@ -1,6 +1,8 @@
 export const ADD_COMMENT = 'ADD_COMMENT'
 export const ADD_CATEGORY = 'ADD_CATEGORY'
+export const ADD_POST = 'ADD_POST'
 export const INIT_CATEGORIES = 'INIT_CATEGORIES'
+export const INIT_POSTS = 'INIT_POSTS'
 
 
 export function addComment ( comment ) {
@@ -21,5 +23,12 @@ export function initCategories ( categories ) {
   return {
     type: INIT_CATEGORIES,
     categories
+  }
+}
+
+export function initPosts ( posts ) {
+  return {
+    type: INIT_POSTS,
+    posts
   }
 }

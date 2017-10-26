@@ -3,7 +3,9 @@ import { combineReducers } from 'redux'
 import {
   ADD_COMMENT,
   ADD_CATEGORY,
-  INIT_CATEGORIES
+  ADD_POST,
+  INIT_CATEGORIES,
+  INIT_POSTS,
 } from '../actions'
 
 function comments (state = {}, action) {
@@ -33,7 +35,26 @@ function categories (state = {}, action) {
       const { categories } = action
       return {
         ...state,
-        categories: categories,
+        categories: categories ,
+      }
+    default :
+      return state
+  }
+}
+
+function posts (state = {}, action) {
+  switch (action.type) {
+    case ADD_POST:
+      const { post } = action
+      return {
+        ...state,
+        [posts]: post,
+      }
+    case INIT_POSTS:
+      const { posts } = action
+      return {
+        ...state,
+        posts: posts ,
       }
     default :
       return state
@@ -43,4 +64,5 @@ function categories (state = {}, action) {
 export default combineReducers({
   comments,
   categories,
+  posts
 })
