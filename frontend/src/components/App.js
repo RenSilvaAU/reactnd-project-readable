@@ -13,6 +13,7 @@ import CreateEdit from './CreateEdit'
 import Default from './Default'
 import PostDetail from './PostDetail'
 
+
 class App extends Component {
 
   state={
@@ -39,7 +40,7 @@ class App extends Component {
       .then((data) => { 
         console.log('received data:',data);
         // this.setState({categories:JSON.parse(data).categories})
-        this.props.initPosts( JSON.parse(data).posts )
+        this.props.initPosts( JSON.parse(data) ) // I love consistency!
       });
 
 
