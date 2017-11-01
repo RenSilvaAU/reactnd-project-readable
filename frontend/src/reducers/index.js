@@ -7,6 +7,8 @@ import {
   INIT_CATEGORIES,
   INIT_POSTS,
   FETCH_COMMENTS,  
+  DOWNVOTE,
+  UPVOTE
 } from '../actions'
 
 function comments (state = {}, action) {
@@ -67,6 +69,15 @@ function posts (state = {}, action) {
         ...state,
         [posts]: post,
       }
+
+    case UPVOTE:
+      const { postId_up } = action
+      return state
+    
+    case DOWNVOTE: 
+      const { postId_down } = action
+      return state
+
     case INIT_POSTS:
       const { posts } = action
       return {

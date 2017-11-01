@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { addComment, addCategory} from '../actions'
+import { addComment, addCategory, upVote, downVote} from '../actions'
 
 import changeCase from 'change-case'
 
@@ -38,11 +38,23 @@ class Default extends Component {
     }
 
   }
+
+  upvote(id) {
+
+    this.props.upVote(id) 
+
+  }
+
+  downvote(id) {
+
+    this.props.downVote(id) 
+
+  }
   render() {
 
     // posts.filter( (post) => (post.category == cat.name) )
 
-    const { categories, posts, comments, addComment, addCategory } = this.props
+    const { categories, posts, comments, addComment, addCategory, downVote, upVote } = this.props
 
     console.log('Props', this.props)
 
@@ -50,8 +62,7 @@ class Default extends Component {
 
     	<div className="container">
     	
-          <div className="subheader">Post by Category</div>
-          <div className="purpose">{changeCase.sentenceCase("list all available categories, which should link to a category view for that category")}</div>
+          <div className="subheader">Category</div>
                     
           {categories && categories.map( (cat) => {
             return (
@@ -80,35 +91,49 @@ class Default extends Component {
                                     <button className={"one-sm post-voteScore " + this.voted(post.id)} 
                                    onClick={ () => this.toggleVote(post.id) } >{post.voteScore} </button>
                                     </div> 
-                                    <FaArrowUp className="two-sm"/>
-                                    <FaArrowDown className="three-sm"/>
+                                    <FaArrowUp className="two-sm" onClick={ () => this.upvote(post.id) } />
+                                    <FaArrowDown className="three-sm" onClick={ () => this.downvote(post.id) } />
                                     </div>
 
-                                  <div className="ctwo">Comments</div>
+
                                 </div>
 
-                                <div className="comments">
-                                { 
-                                  comments && comments.filter( (comment) => (comment.parentId === post.id)).map( (comment) => {
+                                { ( comments && comments.filter( (comment) => (comment.parentId === post.id)).length > 0 ) 
            
-                                  return (
-                                    <div className="grid-wrapper" key={comment.id}>
-                                        <div className="cone comment-author">{comment.author}</div>
-                                        <div className="ctwo comment-body">{comment.body}</div>
+                                ? // then
+                                (
+                                  <div>
+
+                                    <h4>Comments</h4>
+
+                                    <div className="comments">
+                                    { comments.filter( (comment) => (comment.parentId === post.id)).map( (comment) => {
+                                      return (
+                                        <div className="grid-wrapper" key={comment.id}>
+                                            <div className="cone comment-author">{comment.author}</div>
+                                            <div className="ctwo comment-body">{comment.body}</div>
+                                        </div>
+                                        )
+                                      })
+                                    }
                                     </div>
-                                    )
-                                  })
-                                }
-                                </div>
+                                  </div>
+                                  )
+                                :
+                                <div />
+                              }
+                              <div className="empty">Comment + </div> 
+
                               </div>
                             </div>
                           </div>
                         )})
                     ) 
                     : // else
-                    <div className="empty">... Empty Category </div> 
-
+                    <div />
                   }
+                  <div className="empty">Post +</div> 
+
               </div>
             )
           })}
@@ -125,7 +150,11 @@ class Default extends Component {
 function mapDispatchToProps (dispatch) {
   return {
     addComment: (data) => dispatch(addComment(data)),
-    addCategory: (data) => dispatch(addCategory(data))
+    addCategory: (data) => dispatch(addCategory(data)),
+
+    downVote: (data) => dispatch(downVote(data)),
+    upVote: (data) => dispatch(upVote(data)),
+
   }
 }
 
