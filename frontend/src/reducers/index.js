@@ -6,6 +6,7 @@ import {
   ADD_POST,
   INIT_CATEGORIES,
   INIT_POSTS,
+  FETCH_COMMENTS,  
 } from '../actions'
 
 function comments (state = {}, action) {
@@ -17,6 +18,22 @@ function comments (state = {}, action) {
       return {
         ...state,
         [comment]: comment,
+      }
+    case FETCH_COMMENTS:
+      const { comments } = action;
+
+      if (typeof(state.comments) === 'undefined') {
+        return {
+          ...state,
+          comments: comments ,
+        }
+      } else { 
+
+        return {
+          ...state,
+          comments: state.comments.concat(comments) ,
+        }
+
       }
     default :
       return state

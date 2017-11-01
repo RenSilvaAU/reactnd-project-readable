@@ -4,11 +4,40 @@ import { addComment, addCategory} from '../actions'
 
 import changeCase from 'change-case'
 
+import { FaArrowUp, FaArrowDown } from 'react-icons/lib/fa'
+
 class Default extends Component {
 
-	// identical to the default view, but filtered to only include posts with the selected category
 
+  state={
+    myvotes : { 'test': false}
+  }
 
+  toggleVote(id) {
+
+      this.setState( (state) => { 
+
+        if ( typeof(state.myvotes[id]) === 'undefined' ) {
+          state.myvotes[id] = true
+        } else {
+          state.myvotes[id] = !(state.myvotes[id]) ;
+        }
+
+        return ( { myvotes : state.myvotes });
+
+      });
+
+  }
+
+  voted(id)  {
+
+    if  ( typeof(this.state.myvotes[id]) !== 'undefined' && this.state.myvotes[id] ) {
+      return "my-vote"
+    } else {
+      return "" 
+    }
+
+  }
   render() {
 
     // posts.filter( (post) => (post.category == cat.name) )
@@ -19,27 +48,65 @@ class Default extends Component {
 
     return (
 
-    	<div>
+    	<div className="container">
     	
-          <h2>Post by Category</h2>
-          <div>list all available categories, which should link to a category view for that category</div>
+          <div className="subheader">Post by Category</div>
+          <div className="purpose">{changeCase.sentenceCase("list all available categories, which should link to a category view for that category")}</div>
                     
           {categories && categories.map( (cat) => {
             return (
-              <div>
-                <h3 className="Category" key={cat.name}>{changeCase.titleCase(cat.name)}</h3>
+              <div key={cat.name}>
+                <h3 className="Category" >{changeCase.titleCase(cat.name)}</h3>
 
-                  { (posts && posts.filter( (post) => (post.category == cat.name)).length > 0 )
+                  { (posts && posts.filter( (post) => (post.category === cat.name)).length > 0 )
 
                     ? // then
 
-                    ( posts.filter( (post) => (post.category == cat.name)).map( (post) => {
+                    ( posts.filter( (post) => (post.category === cat.name)).map( (post) => {
                         return (
-                          <div>{post.body}</div>
+                          <div key={post.id}>
+                            <div className="grid-wrapper">
+                              <div className="cone post-author">{post.author}</div>
+                              <div className="ctwo">
+
+                                <div className="post-title">{post.title}</div>
+                                <div className="post-body">{post.body}</div>
+
+                                <div className="grid-wrapper">
+                                  <div className="cone">
+
+                                    <div className="grid-sm">
+
+                                    <button className={"one-sm post-voteScore " + this.voted(post.id)} 
+                                   onClick={ () => this.toggleVote(post.id) } >{post.voteScore} </button>
+                                    </div> 
+                                    <FaArrowUp className="two-sm"/>
+                                    <FaArrowDown className="three-sm"/>
+                                    </div>
+
+                                  <div className="ctwo">Comments</div>
+                                </div>
+
+                                <div className="comments">
+                                { 
+                                  comments && comments.filter( (comment) => (comment.parentId === post.id)).map( (comment) => {
+           
+                                  return (
+                                    <div className="grid-wrapper" key={comment.id}>
+                                        <div className="cone comment-author">{comment.author}</div>
+                                        <div className="ctwo comment-body">{comment.body}</div>
+                                    </div>
+                                    )
+                                  })
+                                }
+                                </div>
+                              </div>
+                            </div>
+                          </div>
                         )})
                     ) 
                     : // else
-                    <div style={{color: '#d3d3d3'}}>... Empty Category </div> 
+                    <div className="empty">... Empty Category </div> 
 
                   }
               </div>
@@ -57,15 +124,15 @@ class Default extends Component {
 
 function mapDispatchToProps (dispatch) {
   return {
-
     addComment: (data) => dispatch(addComment(data)),
     addCategory: (data) => dispatch(addCategory(data))
   }
 }
+
 function mapStateToProps ({ categories, posts, comments }) {
   return { categories: categories.categories,
-           posts:posts.posts, // love consistency!
-           comments: comments }
+           posts:posts.posts, 
+           comments: comments.comments }
 }
 
 export default  connect(

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 
-import { initCategories, initPosts } from '../actions'
+import { initCategories, initPosts, fetchComments } from '../actions'
 
 import logo from '../logo.svg';
 import '../App.css';
@@ -17,6 +17,26 @@ import PostDetail from './PostDetail'
 class App extends Component {
 
   state={
+  }
+
+
+  getComments(postId) {
+
+        const url = `${process.env.REACT_APP_BACKEND}/posts/${postId}/comments`;        
+        console.log('fetching from url', url); 
+
+        fetch(url, { headers: { 'Authorization': 'whatever-you-want' }} )
+          .then( (res) => { return(res.text()) })
+          .then( (data) => { 
+            console.log('received data:',data);
+
+              try {
+                this.props.fetchComments( JSON.parse(data) )
+              } catch(err) {
+                // couldn't be done
+              }
+        });
+
   }
 
   componentDidMount() {
@@ -39,10 +59,18 @@ class App extends Component {
       .then( (res) => { return(res.text()) })
       .then((data) => { 
         console.log('received data:',data);
-        // this.setState({categories:JSON.parse(data).categories})
-        this.props.initPosts( JSON.parse(data) ) // I love consistency!
-      });
 
+        const readPosts = JSON.parse(data); // array containing posts just loaded
+
+        this.props.initPosts( readPosts ); 
+
+        readPosts.forEach( (post) => {
+          this.getComments(post.id);
+        });
+
+
+
+      });
 
   }
 
@@ -53,7 +81,7 @@ class App extends Component {
 
   render() {
 
-    const {  initCategories, initPosts} = this.props
+    const {  initCategories, initPosts, fetchComments, posts} = this.props
 
     return (
       
@@ -109,12 +137,13 @@ class App extends Component {
 function mapDispatchToProps (dispatch) {
   return {
     initCategories: (data) => dispatch(initCategories(data)),
-    initPosts: (data) => dispatch(initPosts(data))
+    initPosts: (data) => dispatch(initPosts(data)),
+    fetchComments: (data) => dispatch(fetchComments(data))
   }
 }
 
-function mapStateToProps () {
-  // left empty, as I will not need to access any props in this component
+function mapStateToProps ({ posts }) {
+  return { posts:posts.posts }
 }
 
 export default  connect(
