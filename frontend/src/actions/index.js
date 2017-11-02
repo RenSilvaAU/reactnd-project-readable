@@ -14,6 +14,13 @@ export function addComment ( comment ) {
   }
 }
 
+export function addPost ( post ) {
+  return {
+    type: ADD_POST,
+    post
+  }
+}
+
 export function addCategory ( category ) {
   return {
     type: ADD_CATEGORY,

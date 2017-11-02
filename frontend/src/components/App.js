@@ -16,20 +16,14 @@ import PostDetail from './PostDetail'
 
 class App extends Component {
 
-  state={
-  }
-
-
   getComments(postId) {
 
         const url = `${process.env.REACT_APP_BACKEND}/posts/${postId}/comments`;        
-        console.log('fetching from url', url); 
 
         fetch(url, { headers: { 'Authorization': 'whatever-you-want' }} )
           .then( (res) => { return(res.text()) })
           .then( (data) => { 
-            console.log('received data:',data);
-
+ 
               try {
                 this.props.fetchComments( JSON.parse(data) )
               } catch(err) {
@@ -43,23 +37,21 @@ class App extends Component {
 
     // get categories
     var url = `${process.env.REACT_APP_BACKEND}/categories`;
-    console.log('fetching from url', url);
+
     fetch(url, { headers: { 'Authorization': 'whatever-you-want' }} )
       .then( (res) => { return(res.text()) })
       .then((data) => { 
-        console.log('received data:',data);
-        // this.setState({categories:JSON.parse(data).categories})
+
         this.props.initCategories( JSON.parse(data).categories )
       });
 
     // get posts
     url = `${process.env.REACT_APP_BACKEND}/posts`;
-    console.log('fetching from url', url);
+
     fetch(url, { headers: { 'Authorization': 'whatever-you-want' }} )
       .then( (res) => { return(res.text()) })
       .then((data) => { 
-        console.log('received data:',data);
-
+ 
         const readPosts = JSON.parse(data); // array containing posts just loaded
 
         this.props.initPosts( readPosts ); 
@@ -87,10 +79,11 @@ class App extends Component {
       
       <div className="app">
 
-        <div className='container'>
-
-             <h1 className='header'>Readable</h1>
-
+            <div className="container">
+              <div className="top">
+               <h1 className='header'>Readable</h1>
+              </div>
+            </div>
 
             <Route exact path="/"
 
@@ -129,7 +122,7 @@ class App extends Component {
               )}/>
 
         </div>
-      </div>
+
     );
   }
 }

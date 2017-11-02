@@ -1,16 +1,45 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { addComment, addCategory, upVote, downVote} from '../actions'
+import { addComment, addCategory, addPost, upVote, downVote} from '../actions'
 
 import changeCase from 'change-case'
 
 import { FaArrowUp, FaArrowDown } from 'react-icons/lib/fa'
 
+
+import { Modal, Button, Row, Grid } from 'react-bootstrap';
+
+const uuidv1 = require('uuid/v1');
+  
+
+
 class Default extends Component {
 
 
   state={
-    myvotes : { 'test': false}
+
+    myvotes : { },
+
+    isShowingDialog : false,
+
+    modalTitle : "Comment",
+
+    postCallBack : null,
+
+    post: ""
+
+  }
+
+  showDialog( title,  postCallBack ) {
+    this.setState( {modalTitle : title,
+                    isShowingDialog : true,
+                    postCallBack : postCallBack});
+
+
+  }
+
+  hideDialog() {
+    this.setState( {isShowingDialog: false})
   }
 
   toggleVote(id) {
@@ -28,6 +57,48 @@ class Default extends Component {
       });
 
   }
+
+  postComment(text, parent) {
+    // post  stuff
+
+    const id = uuidv1();
+
+    const newComment = {  author:   "thingtwo" ,
+                          body:     text,
+                          category: "react",
+                          deleted:  false,
+                          id:       id,
+                          timestamp: Date.now() ,
+                          title:     text,
+                          voteScore: 0 
+                        }
+
+    parent.props.addComment(  newComment );
+
+  }
+
+  postPost(text, parent) {
+    // post  stuff
+
+    const id = uuidv1();
+
+    alert('will post a Post with text ' + text + ' and UID= ' +  id);
+
+
+    const newPost = {  author:   "thingtwo" ,
+                          body:     text,
+                          category: "react",
+                          deleted:  false,
+                          id:       id,
+                          timestamp: Date.now() ,
+                          title:     text,
+                          voteScore: 0 
+                        }
+
+    parent.props.addPost(  newPost  );
+
+  }
+
 
   voted(id)  {
 
@@ -54,9 +125,7 @@ class Default extends Component {
 
     // posts.filter( (post) => (post.category == cat.name) )
 
-    const { categories, posts, comments, addComment, addCategory, downVote, upVote } = this.props
-
-    console.log('Props', this.props)
+    const { categories, posts, comments, addComment, addPost, addCategory, downVote, upVote } = this.props
 
     return (
 
@@ -119,20 +188,18 @@ class Default extends Component {
                                     </div>
                                   </div>
                                   )
-                                :
-                                <div />
+                                : null
                               }
-                              <div className="empty">Comment + </div> 
+                              <div style={{cursor:'pointer'}}  className="empty"  onClick={ () => this.showDialog("Your Comment", this.postComment ) } >Comment + </div> 
 
                               </div>
                             </div>
                           </div>
                         )})
                     ) 
-                    : // else
-                    <div />
+                    : null
                   }
-                  <div className="empty">Post +</div> 
+                  <div style={{cursor:'pointer'}}  className="empty" onClick={ () => this.showDialog("Your Post",  this.postPost ) } >Post +</div> 
 
               </div>
             )
@@ -141,7 +208,43 @@ class Default extends Component {
             <p>a control for changing the sort method for the list, including at minimum, order by voteScore and order by timestamp</p>
             <p>should have a control for adding a new post</p>
 
+        {this.state.isShowingDialog ?
 
+          <form>
+            <Modal.Dialog>
+              <Modal.Header>
+                <Modal.Title>{this.state.modalTitle}</Modal.Title>
+              </Modal.Header>
+
+              <Modal.Body>
+                <Grid>
+
+                  <Row>  
+                    <input width={'100%'} type="text" placeholder="Author" authoFocus />
+                  </Row>
+                  <Row>  
+                    <input width={'100%'} type="text" placeholder="Title" authoFocus />
+                  </Row>
+                  <Row>  
+                    <textarea className="textareaInput" rows={5} placeholder="Enter here" defaultValue={""} autoFocus
+                     onChange={ (event) => this.setState( { post: event.target.value })}/>
+                  </Row>
+                </Grid>
+              </Modal.Body>
+
+              <Modal.Footer>
+                <Button onClick={ () => this.hideDialog() }>Close</Button>
+                <Button type="submit" bsStyle="primary" 
+                onClick={ () => { 
+                  this.state.postCallBack(this.state.post, this);
+                  this.hideDialog()
+                 } 
+               }>Post</Button>
+              </Modal.Footer>
+            </Modal.Dialog>
+          </form>
+          : null
+        }
       </div>
     );
   }
@@ -150,6 +253,7 @@ class Default extends Component {
 function mapDispatchToProps (dispatch) {
   return {
     addComment: (data) => dispatch(addComment(data)),
+    addPost: (data) => dispatch(addPost(data)),
     addCategory: (data) => dispatch(addCategory(data)),
 
     downVote: (data) => dispatch(downVote(data)),

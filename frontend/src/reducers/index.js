@@ -19,7 +19,7 @@ function comments (state = {}, action) {
 
       return {
         ...state,
-        [comment]: comment,
+        comments: state.comments.concat(comment),
       }
     case FETCH_COMMENTS:
       const { comments } = action;
@@ -27,13 +27,13 @@ function comments (state = {}, action) {
       if (typeof(state.comments) === 'undefined') {
         return {
           ...state,
-          comments: comments ,
+          comments: comments,
         }
       } else { 
 
         return {
           ...state,
-          comments: state.comments.concat(comments) ,
+          comments: state.comments.concat(comments),
         }
 
       }
@@ -48,13 +48,13 @@ function categories (state = {}, action) {
       const { category } = action
       return {
         ...state,
-        [categories]: category,
+        categories: state.categories.concat(category),
       }
     case INIT_CATEGORIES:
       const { categories } = action
       return {
         ...state,
-        categories: categories ,
+        categories: categories,
       }
     default :
       return state
@@ -67,7 +67,7 @@ function posts (state = {}, action) {
       const { post } = action
       return {
         ...state,
-        [posts]: post,
+        posts: state.posts.concat(post),
       }
 
     case UPVOTE:
@@ -82,7 +82,7 @@ function posts (state = {}, action) {
       const { posts } = action
       return {
         ...state,
-        posts: posts ,
+        posts: posts,
       }
     default :
       return state
