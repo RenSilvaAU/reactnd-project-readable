@@ -4,10 +4,10 @@ import { addComment, addCategory, addPost, upVote, downVote} from '../actions'
 
 import changeCase from 'change-case'
 
-import { FaArrowUp, FaArrowDown } from 'react-icons/lib/fa'
+import { FaArrowUp, FaArrowDown, FaPencil } from 'react-icons/lib/fa'
 
 
-import { Modal, Button, Row, Grid } from 'react-bootstrap';
+import { Modal, Button, Row, Grid, Clearfix } from 'react-bootstrap';
 
 const uuidv1 = require('uuid/v1');
   
@@ -22,18 +22,46 @@ class Default extends Component {
 
     isShowingDialog : false,
 
-    modalTitle : "Comment",
+    modalFormTitle : "Comment",
 
     postCallBack : null,
 
-    post: ""
+    modalTitle : "",
+    modalBody  : "",
+    modalAuthor : "",
+    modalCategory : "",
+    modalPostId : null
 
   }
 
-  showDialog( title,  postCallBack ) {
-    this.setState( {modalTitle : title,
+  showDialog( formTitle,  postCallBack ) {
+    this.setState( {modalFormTitle : formTitle,
                     isShowingDialog : true,
                     postCallBack : postCallBack});
+
+
+  }
+
+  showPostDialog( category="" , title="",body="",author="",voteScore=0 ) {
+
+    this.setState( {  modalTitle : title,
+                      modalBody  : body,
+                      modalAuthor : author,
+                      modalCategory : category,
+                      modalVoteScore : voteScore} );
+
+    this.showDialog("Your Post", this.postPost );
+
+  }
+
+  showCommentDialog( postId=null , body="",author="", voteScore=0) {
+
+    this.setState( {  modalBody  : body,
+                      modalAuthor : author,
+                      modalPostId : postId,
+                      modalVoteScore : voteScore} );   
+
+    this.showDialog("Your Comment", this.postComment );
 
 
   }
@@ -63,14 +91,14 @@ class Default extends Component {
 
     const id = uuidv1();
 
-    const newComment = {  author:   "thingtwo" ,
-                          body:     text,
-                          category: "react",
+    const newComment = {  author:   parent.state.modalAuthor  ,
+                          body:     parent.state.modalBody,
                           deleted:  false,
                           id:       id,
+                          parentDeleted: false,
+                          parentId:  parent.state.modalPostId,
                           timestamp: Date.now() ,
-                          title:     text,
-                          voteScore: 0 
+                          voteScore: parent.state.modalVoteScore 
                         }
 
     parent.props.addComment(  newComment );
@@ -82,18 +110,18 @@ class Default extends Component {
 
     const id = uuidv1();
 
-    alert('will post a Post with text ' + text + ' and UID= ' +  id);
+    // alert('will post a Post with text ' + text + ' and UID= ' +  id);
 
 
-    const newPost = {  author:   "thingtwo" ,
-                          body:     text,
-                          category: "react",
-                          deleted:  false,
-                          id:       id,
-                          timestamp: Date.now() ,
-                          title:     text,
-                          voteScore: 0 
-                        }
+    const newPost = {     author:     parent.state.modalAuthor ,
+                          body:       parent.state.modalBody,
+                          category:   parent.state.modalCategory,
+                          deleted:    false,
+                          id:         id,
+                          timestamp:  Date.now() ,
+                          title:      parent.state.modalTitle,
+                          voteScore: parent.state.modalVoteScore
+                    }
 
     parent.props.addPost(  newPost  );
 
@@ -123,21 +151,21 @@ class Default extends Component {
   }
   render() {
 
-    // posts.filter( (post) => (post.category == cat.name) )
-
     const { categories, posts, comments, addComment, addPost, addCategory, downVote, upVote } = this.props
 
     return (
 
     	<div className="container">
     	
-          <div className="subheader">Category</div>
+          <div className="padding-top"></div>
                     
           {categories && categories.map( (cat) => {
             return (
               <div key={cat.name}>
-                <h3 className="Category" >{changeCase.titleCase(cat.name)}</h3>
-
+                <div className="grid-wrapper">
+                <div className="cone subheader"></div>
+                <div className="ctwo subheader" >{changeCase.titleCase(cat.name)}</div>
+                </div>
                   { (posts && posts.filter( (post) => (post.category === cat.name)).length > 0 )
 
                     ? // then
@@ -150,20 +178,20 @@ class Default extends Component {
                               <div className="ctwo">
 
                                 <div className="post-title">{post.title}</div>
+                                <FaPencil  style={{cursor:'pointer'}}  className="spacer" onClick={ () => this.showPostDialog( cat.name, post.title, post.body, post.author, post.voteScore ) } />
+ 
                                 <div className="post-body">{post.body}</div>
 
                                 <div className="grid-wrapper">
                                   <div className="cone">
 
-                                    <div className="grid-sm">
-
-                                    <button className={"one-sm post-voteScore " + this.voted(post.id)} 
-                                   onClick={ () => this.toggleVote(post.id) } >{post.voteScore} </button>
-                                    </div> 
-                                    <FaArrowUp className="two-sm" onClick={ () => this.upvote(post.id) } />
-                                    <FaArrowDown className="three-sm" onClick={ () => this.downvote(post.id) } />
-                                    </div>
-
+                                      <button className={"post-voteScore " + this.voted(post.id)} 
+                                     onClick={ () => this.toggleVote(post.id) } >{post.voteScore} </button>
+                                       
+                                      <FaArrowUp  style={{cursor:'pointer'}}   className="spacer" onClick={ () => this.upvote(post.id) } />
+                                      <FaArrowDown style={{cursor:'pointer'}}  className="spacer" onClick={ () => this.downvote(post.id) } />
+                           
+                                  </div>
 
                                 </div>
 
@@ -172,16 +200,29 @@ class Default extends Component {
                                 ? // then
                                 (
                                   <div>
-
-                                    <h4>Comments</h4>
+                                    <br />
+                                    <div className="subSubHead">Comments</div>
 
                                     <div className="comments">
                                     { comments.filter( (comment) => (comment.parentId === post.id)).map( (comment) => {
                                       return (
                                         <div className="grid-wrapper" key={comment.id}>
-                                            <div className="cone comment-author">{comment.author}</div>
-                                            <div className="ctwo comment-body">{comment.body}</div>
+                                          <div className="cone comment-author">{comment.author}</div>
+                                          <div className="ctwo">
+
+                                            <FaPencil  style={{cursor:'pointer'}}  className="spacer" onClick={ () => this.showCommentDialog( post.id , comment.body , comment.author, comment.voteScore ) } />
+                                             <div className="comment-body">{comment.body}</div>
+
+                                                <button className={"post-voteScore " + this.voted(comment.id)} 
+                                               onClick={ () => this.toggleVote(comment.id) } >{comment.voteScore} </button>
+                                                
+                                                <FaArrowUp className="spacer" onClick={ () => this.upvote(comment.id) } />
+                                                <FaArrowDown className="spacer" onClick={ () => this.downvote(comment.id) } />
+                                                
+                                            </div>
+                                            <br />
                                         </div>
+
                                         )
                                       })
                                     }
@@ -190,7 +231,7 @@ class Default extends Component {
                                   )
                                 : null
                               }
-                              <div style={{cursor:'pointer'}}  className="empty"  onClick={ () => this.showDialog("Your Comment", this.postComment ) } >Comment + </div> 
+                              <div style={{cursor:'pointer'}}  className="empty"  onClick={ () => this.showCommentDialog( post.id ) } >Comment + </div> 
 
                               </div>
                             </div>
@@ -199,7 +240,7 @@ class Default extends Component {
                     ) 
                     : null
                   }
-                  <div style={{cursor:'pointer'}}  className="empty" onClick={ () => this.showDialog("Your Post",  this.postPost ) } >Post +</div> 
+                  <div style={{cursor:'pointer'}}  className="empty" onClick={ () => this.showPostDialog( cat.name  ) } >Post +</div> 
 
               </div>
             )
@@ -213,23 +254,21 @@ class Default extends Component {
           <form>
             <Modal.Dialog>
               <Modal.Header>
-                <Modal.Title>{this.state.modalTitle}</Modal.Title>
+                <Modal.Title>{this.state.modalFormTitle}</Modal.Title>
               </Modal.Header>
 
               <Modal.Body>
-                <Grid>
 
-                  <Row>  
-                    <input width={'100%'} type="text" placeholder="Author" authoFocus />
-                  </Row>
-                  <Row>  
-                    <input width={'100%'} type="text" placeholder="Title" authoFocus />
-                  </Row>
-                  <Row>  
-                    <textarea className="textareaInput" rows={5} placeholder="Enter here" defaultValue={""} autoFocus
-                     onChange={ (event) => this.setState( { post: event.target.value })}/>
-                  </Row>
-                </Grid>
+                    <input className="inputField" type="text" placeholder="Author" autoFocus
+                    value={this.state.modalAuthor}
+                    onChange={ (event) => this.setState( { modalAuthor: event.target.value })} />
+                    <input className="inputField" type="text" placeholder="Title"
+                    value={this.state.modalTitle}
+                    onChange={ (event) => this.setState( { modalTitle: event.target.value })} />
+                    <textarea className="textareaInput" rows={5} placeholder="Enter here" defaultValue={""}
+                    defaultValue={this.state.modalBody}
+                    onChange={ (event) => this.setState( {modalBody: event.target.value })}/>
+          
               </Modal.Body>
 
               <Modal.Footer>

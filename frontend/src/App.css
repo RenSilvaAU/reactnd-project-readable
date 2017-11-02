@@ -27,7 +27,7 @@
 .container {
   margin: 0 auto;
   max-width: 1070px;
-  padding: 20px;
+  padding: 0 20px 0 20px;
   min-width: 1070px;
 }
 
@@ -36,10 +36,10 @@
   margin: 0 auto;
   position: fixed;
   background: white;
-  border-color: #d3d3d3;
-  border-style: solid;
-  border-width: 0 0 1px 0; 
-  border-radius: 5px;
+
+  width:100%;
+  max-width: 1070px;
+  box-sizing: border-box;
 
 }
 
@@ -52,9 +52,14 @@
   font-weight: 300;
   margin: 10px 0;
 }
-
+.padding-top {
+  margin-top: 70px;  
+}
 .subheader {
-  margin: 100px 0;
+  border-color: #d3d3d3;
+  border-style: solid;
+  border-width: 1px 0 0 0; 
+  margin: 10px 0 30px 0;
   font-size: 30px;
   font-weight: 300;
 }
@@ -78,11 +83,13 @@
 .post-author, 
 .comment-author {
   font-weight: 400;
+  line-height:20px;
 }
 
-.post-title {
-  font-weight: 400;
-  margin: 0 0 8px 0;
+.post-title, .subSubHead {
+  font-weight: 500;
+  font-size: 20px;
+  margin: 0 0 0 0;
   overflow-y:hidden;
   white-space:nowrap;
   text-overflow: ellipsis;
@@ -91,8 +98,14 @@
 .post-body, 
 .comment-body {
   font-size:14px;
+  color: #808080;
+  margin: 0 0 10px 0 ;
 }
 
+.subSubHead {
+  color: #808080 !important;
+  margin: 10px 0 0 0 ;
+}
 
 .post-voteScore:focus,
 .my-vote:focus  {
@@ -108,8 +121,9 @@
   border-style: solid;
   border-width: 1px;
   border-radius: 5px;
-  max-width: 30px;
+  min-width: 30px;
   background-color: white;
+  text-align:center;
 }
 
 .my-vote {
@@ -119,7 +133,7 @@
 .empty {
   margin: 10px 0 0 0 ;
   font-size:14px;
-  color: #d3d3d3;
+  color: #33C4FF;
 }
 
 
@@ -137,7 +151,7 @@
 
 .grid-sm {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 3fr 1fr 1fr;
   grid-gap: 1px;
 }
 .one-sm {
@@ -150,6 +164,27 @@
   grid-column: 3 / 3;
 }
 
+.inputField {
+   width:100%;
+   margin: 0 0 10px 0 ; 
+   border-width: 0 0 1px 0;
+}
+.modal-header {
+  border: none;
+}
+
+.spacer {
+  margin-left:5px;
+}
 .textareaInput {
   resize: none;
+  width:100%;
+  border-color:#e5e5e5;
+}
+
+.textareaInput:focus,
+.inputField:focus {
+  outline-width: 0 0 1px 0;
+  outline-color: #e5e5e5 !important;
+
 }
