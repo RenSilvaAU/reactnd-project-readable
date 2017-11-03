@@ -42,7 +42,6 @@ class Default extends Component {
     modalCategory : "",
     modalPostId : null,
 
-
   }
 
   showDialog( formTitle,  postCallBack, showTitle=true ) {
@@ -101,6 +100,9 @@ class Default extends Component {
 
   }
 
+  sortPosts(fieldName) {
+    alert('will sort by ' + fieldName);
+  }
 
 
   postComment(text, parent) {
@@ -173,6 +175,8 @@ class Default extends Component {
             downVoteComment, upVoteComment,  
           } = this.props
 
+    const myFaSort =  <FaSort style={{cursor:'pointer'}} className="spacer" /> 
+
     return (
 
     	<div className="container">
@@ -190,14 +194,13 @@ class Default extends Component {
                 <div className="ctwo">
                   <span className="subheader"></span>
                   <FaPlus style={{cursor:'pointer'}}  className="empty" onClick={ () => this.showPostDialog( cat.name  ) } /> 
-                  <FaSort style={{cursor:'pointer'}}  className="spacer" onClick={ () => {alert('Will Sort')}   } /> 
+                  
+                  <DropdownButton className="simpleButton" bsStyle="default" title={myFaSort} noCaret id="dropdown-no-caret">
 
-                    <DropdownButton bsStyle="default" title="Sort Order" noCaret id="dropdown-no-caret">
+                      <MenuItem eventKey="1" onSelect={ () => this.sortPosts( "Timestamp"  ) }>Timestamp</MenuItem>
+                      <MenuItem eventKey="2" onSelect={ () => this.sortPosts( "Vote Score"  ) }>Vote Score</MenuItem>
 
-                      <MenuItem eventKey="1">Timestamp</MenuItem>
-                      <MenuItem eventKey="2">Author</MenuItem>
-
-                    </DropdownButton>
+                  </DropdownButton>
 
                 </div>
                 </div>

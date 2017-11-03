@@ -202,3 +202,15 @@
 FaPencil {
   color: #33C4FF ;
 }
+
+.simpleButton:active,
+.simpleButton:focus,
+.simpleButton:hover  {
+    background-color: transparent;
+}
+
+.simpleButton {
+  border-width:0 !important;
+  padding:0 !important ;
+}
+
