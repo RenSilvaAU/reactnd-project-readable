@@ -11,6 +11,10 @@ import { FaArrowUp, FaArrowDown, FaPencil, FaPlus, FaSort } from 'react-icons/li
 
 import { Modal, Button, Row, Grid, DropdownButton, MenuItem } from 'react-bootstrap';
 
+const SORT_BY_TIMESTAMP = 1
+const SORT_BY_VOTE_SCORE = 2
+
+
 const uuidv1 = require('uuid/v1');
 
 function displayableDate(timestamp) {
