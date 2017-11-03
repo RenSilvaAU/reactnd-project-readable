@@ -53,16 +53,9 @@
   margin: 10px 0;
 }
 .padding-top {
-  margin-top: 70px;  
+  margin-top: 90px;  
 }
-.subheader {
-  border-color: #d3d3d3;
-  border-style: solid;
-  border-width: 1px 0 0 0; 
-  margin: 10px 0 30px 0;
-  font-size: 30px;
-  font-weight: 300;
-}
+
 
 .icon-btn {
   background: none;
@@ -81,15 +74,14 @@
 }
 
 .post-author, 
-.comment-author {
+.comment-author, .subSubHead  {
   font-weight: 400;
   line-height:20px;
 }
 
-.post-title, .subSubHead {
+.post-title {
   font-weight: 500;
   font-size: 20px;
-  margin: 0 0 0 0;
   overflow-y:hidden;
   white-space:nowrap;
   text-overflow: ellipsis;
@@ -99,12 +91,26 @@
 .comment-body {
   font-size:14px;
   color: #808080;
-  margin: 0 0 10px 0 ;
+  margin: 1px 0 10px 0;
+}
+
+.timestamp
+{
+  font-size:12px;
+  line-height:20px;
+  color: #d3d3d3;
+}
+
+
+.subheader {
+  font-size: 30px;
+  font-weight: 300;
+  margin: 5px 0 30px 0;
 }
 
 .subSubHead {
   color: #808080 !important;
-  margin: 10px 0 0 0 ;
+  margin: 20px 0 10px 0;
 }
 
 .post-voteScore:focus,
@@ -131,8 +137,6 @@
 }
 
 .empty {
-  margin: 10px 0 0 0 ;
-  font-size:14px;
   color: #33C4FF;
 }
 
@@ -176,6 +180,13 @@
 .spacer {
   margin-left:5px;
 }
+
+.divider {
+  border-color: #d3d3d3;
+  border-style: solid;
+  border-width: 1px 0 0 0; 
+}
+
 .textareaInput {
   resize: none;
   width:100%;
@@ -186,5 +197,8 @@
 .inputField:focus {
   outline-width: 0 0 1px 0;
   outline-color: #e5e5e5 !important;
+}
 
+FaPencil {
+  color: #33C4FF ;
 }

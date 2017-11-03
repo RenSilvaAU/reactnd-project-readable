@@ -7,8 +7,11 @@ import {
   INIT_CATEGORIES,
   INIT_POSTS,
   FETCH_COMMENTS,  
-  DOWNVOTE,
-  UPVOTE
+  DOWNVOTE_POST,
+  UPVOTE_POST,
+  DOWNVOTE_COMMENT,
+  UPVOTE_COMMENT,
+
 } from '../actions'
 
 function comments (state = {}, action) {
@@ -21,7 +24,42 @@ function comments (state = {}, action) {
         ...state,
         comments: state.comments.concat(comment),
       }
+
+    case UPVOTE_COMMENT:
+    
+      const { upCommentId } = action
+
+      return {
+        ...state,
+
+       comments: state.comments.map(
+           (comment) => { 
+                          return (
+                          comment.id === upCommentId
+                        ? {...comment, voteScore: comment.voteScore  + 1 }
+                        : comment
+                        )})
+
+        }
+      
+    case DOWNVOTE_COMMENT:
+    
+      const { downCommentId } = action
+
+      return {
+        ...state,
+       comments: state.comments.map(
+           (comment) => { 
+                          return (
+                          comment.id === downCommentId
+                        ? {...comment, voteScore: comment.voteScore  - 1 }
+                        : comment
+                        )})
+
+        }
+
     case FETCH_COMMENTS:
+
       const { comments } = action;
 
       if (typeof(state.comments) === 'undefined') {
@@ -70,13 +108,40 @@ function posts (state = {}, action) {
         posts: state.posts.concat(post),
       }
 
-    case UPVOTE:
-      const { postId_up } = action
-      return state
+    case UPVOTE_POST:
     
-    case DOWNVOTE: 
-      const { postId_down } = action
-      return state
+      const { upPostId } = action
+
+      return {
+        ...state,
+
+       posts: state.posts.map(
+           (post) => { 
+                          return (
+                          post.id === upPostId
+                        ? {...post, voteScore: post.voteScore  + 1 }
+                                   : post
+                        )})
+
+        }
+      
+    case DOWNVOTE_POST:
+    
+      const { downPostId } = action
+
+      return {
+        ...state,
+
+       posts: state.posts.map(
+           (post) => { 
+                          return (
+                          post.id === downPostId
+                        ? {...post, voteScore: post.voteScore  - 1 }
+                                   : post
+                        )})
+
+        }
+
 
     case INIT_POSTS:
       const { posts } = action

@@ -4,8 +4,10 @@ export const ADD_POST = 'ADD_POST'
 export const INIT_CATEGORIES = 'INIT_CATEGORIES'
 export const INIT_POSTS = 'INIT_POSTS'
 export const FETCH_COMMENTS = 'FETCH_COMMENTS'
-export const DOWNVOTE = 'DOWNVOTE'
-export const UPVOTE = 'UPVOTE'
+export const DOWNVOTE_COMMENT = 'DOWNVOTE_COMMENT'
+export const UPVOTE_COMMENT = 'UPVOTE_COMMENT'
+export const DOWNVOTE_POST = 'DOWNVOTE_POST'
+export const UPVOTE_POST = 'UPVOTE_POST'
 
 export function addComment ( comment ) {
   return {
@@ -42,18 +44,33 @@ export function initPosts ( posts ) {
   }
 }
 
-export function downVote ( postId ) {
+export function downVotePost ( downPostId ) {
   return {
-    type: DOWNVOTE,
-    postId
+    type: DOWNVOTE_POST,
+    downPostId
   }
 }
 
 
-export function upVote ( postId ) {
+export function upVotePost ( upPostId ) {
   return {
-    type: UPVOTE,
-    postId
+    type: UPVOTE_POST,
+    upPostId
+  }
+}
+
+export function downVoteComment ( downCommentId ) {
+  return {
+    type: DOWNVOTE_COMMENT,
+    downCommentId
+  }
+}
+
+
+export function upVoteComment ( upCommentId ) {
+  return {
+    type: UPVOTE_COMMENT,
+    upCommentId
   }
 }
 

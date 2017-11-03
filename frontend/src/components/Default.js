@@ -1,18 +1,27 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { addComment, addCategory, addPost, upVote, downVote} from '../actions'
+import {  addComment, addCategory, addPost, 
+          downVotePost, upVotePost,  
+          downVoteComment, upVoteComment} from '../actions'
 
 import changeCase from 'change-case'
 
-import { FaArrowUp, FaArrowDown, FaPencil } from 'react-icons/lib/fa'
+import { FaArrowUp, FaArrowDown, FaPencil, FaPlus, FaSort } from 'react-icons/lib/fa'
 
 
-import { Modal, Button, Row, Grid, Clearfix } from 'react-bootstrap';
+import { Modal, Button, Row, Grid, DropdownButton, MenuItem } from 'react-bootstrap';
 
 const uuidv1 = require('uuid/v1');
+
+function displayableDate(timestamp) {
+
+  var newDate = new Date();
+  newDate.setTime(timestamp);
   
+  return newDate.toUTCString();
 
 
+}
 class Default extends Component {
 
 
@@ -21,6 +30,7 @@ class Default extends Component {
     myvotes : { },
 
     isShowingDialog : false,
+    isShowingTitle : false,
 
     modalFormTitle : "Comment",
 
@@ -30,16 +40,23 @@ class Default extends Component {
     modalBody  : "",
     modalAuthor : "",
     modalCategory : "",
-    modalPostId : null
+    modalPostId : null,
+
 
   }
 
-  showDialog( formTitle,  postCallBack ) {
+  showDialog( formTitle,  postCallBack, showTitle=true ) {
     this.setState( {modalFormTitle : formTitle,
                     isShowingDialog : true,
-                    postCallBack : postCallBack});
+                    postCallBack : postCallBack,
+                    isShowingTitle: showTitle });
 
 
+
+  }
+
+  hideDialog() {
+    this.setState( {isShowingDialog: false})
   }
 
   showPostDialog( category="" , title="",body="",author="",voteScore=0 ) {
@@ -50,7 +67,7 @@ class Default extends Component {
                       modalCategory : category,
                       modalVoteScore : voteScore} );
 
-    this.showDialog("Your Post", this.postPost );
+    this.showDialog("Your Post", this.postPost , true);
 
   }
 
@@ -61,14 +78,12 @@ class Default extends Component {
                       modalPostId : postId,
                       modalVoteScore : voteScore} );   
 
-    this.showDialog("Your Comment", this.postComment );
+    this.showDialog("Your Comment", this.postComment, false );
 
 
   }
 
-  hideDialog() {
-    this.setState( {isShowingDialog: false})
-  }
+
 
   toggleVote(id) {
 
@@ -85,6 +100,8 @@ class Default extends Component {
       });
 
   }
+
+
 
   postComment(text, parent) {
     // post  stuff
@@ -151,7 +168,10 @@ class Default extends Component {
   }
   render() {
 
-    const { categories, posts, comments, addComment, addPost, addCategory, downVote, upVote } = this.props
+    const { categories, posts, comments, addComment, addPost, 
+            addCategory, downVotePost, upVotePost,  
+            downVoteComment, upVoteComment,  
+          } = this.props
 
     return (
 
@@ -162,9 +182,24 @@ class Default extends Component {
           {categories && categories.map( (cat) => {
             return (
               <div key={cat.name}>
-                <div className="grid-wrapper">
-                <div className="cone subheader"></div>
-                <div className="ctwo subheader" >{changeCase.titleCase(cat.name)}</div>
+                <div className="grid-wrapper divider">
+                <div className="cone">
+                  <div className="subheader" >{changeCase.titleCase(cat.name)}</div>
+                </div>
+
+                <div className="ctwo">
+                  <span className="subheader"></span>
+                  <FaPlus style={{cursor:'pointer'}}  className="empty" onClick={ () => this.showPostDialog( cat.name  ) } /> 
+                  <FaSort style={{cursor:'pointer'}}  className="spacer" onClick={ () => {alert('Will Sort')}   } /> 
+
+                    <DropdownButton bsStyle="default" title="Sort Order" noCaret id="dropdown-no-caret">
+
+                      <MenuItem eventKey="1">Timestamp</MenuItem>
+                      <MenuItem eventKey="2">Author</MenuItem>
+
+                    </DropdownButton>
+
+                </div>
                 </div>
                   { (posts && posts.filter( (post) => (post.category === cat.name)).length > 0 )
 
@@ -173,51 +208,60 @@ class Default extends Component {
                     ( posts.filter( (post) => (post.category === cat.name)).map( (post) => {
                         return (
                           <div key={post.id}>
+
                             <div className="grid-wrapper">
-                              <div className="cone post-author">{post.author}</div>
+                              <div className="cone"> 
+                                  <span className="post-author">{post.author}</span>
+                                   <FaPencil  style={{cursor:'pointer'}}  className="spacer" onClick={ () => this.showPostDialog( cat.name, post.title, post.body, post.author, post.voteScore ) } />
+                                  <div className="timestamp">{displayableDate(post.timestamp)}</div>
+ 
+                              </div>
                               <div className="ctwo">
 
                                 <div className="post-title">{post.title}</div>
-                                <FaPencil  style={{cursor:'pointer'}}  className="spacer" onClick={ () => this.showPostDialog( cat.name, post.title, post.body, post.author, post.voteScore ) } />
- 
+      
+
                                 <div className="post-body">{post.body}</div>
 
-                                <div className="grid-wrapper">
-                                  <div className="cone">
+         
 
-                                      <button className={"post-voteScore " + this.voted(post.id)} 
+                                <button className={"post-voteScore " + this.voted(post.id)} 
                                      onClick={ () => this.toggleVote(post.id) } >{post.voteScore} </button>
                                        
-                                      <FaArrowUp  style={{cursor:'pointer'}}   className="spacer" onClick={ () => this.upvote(post.id) } />
-                                      <FaArrowDown style={{cursor:'pointer'}}  className="spacer" onClick={ () => this.downvote(post.id) } />
+                                <FaArrowUp  style={{cursor:'pointer'}}   className="spacer" onClick={ () => this.props.upVotePost(post.id) } />
+                                <FaArrowDown style={{cursor:'pointer'}}  className="spacer" onClick={ () => this.props.downVotePost(post.id) } />
                            
-                                  </div>
-
+                                <div className="grid-wrapper subSubHead">
+                                  <div className="cone">Comments</div>
+                                  <div className="ctwo">
+                                    <FaPlus style={{cursor:'pointer'}}  className="empty"  onClick={ () => this.showCommentDialog( post.id ) } />
+                                  </div> 
                                 </div>
-
                                 { ( comments && comments.filter( (comment) => (comment.parentId === post.id)).length > 0 ) 
            
                                 ? // then
                                 (
                                   <div>
-                                    <br />
-                                    <div className="subSubHead">Comments</div>
-
+   
                                     <div className="comments">
                                     { comments.filter( (comment) => (comment.parentId === post.id)).map( (comment) => {
                                       return (
                                         <div className="grid-wrapper" key={comment.id}>
-                                          <div className="cone comment-author">{comment.author}</div>
+                                          <div className="cone">
+                                            <span className="comment-author">{comment.author}</span>
+                                            <FaPencil  style={{cursor:'pointer'}}  className="spacer" onClick={ () => this.showCommentDialog( post.id , comment.body , comment.author, comment.voteScore ) } />
+                                            <div className="timestamp">{displayableDate(comment.timestamp)}</div>
+
+                                          </div>
                                           <div className="ctwo">
 
-                                            <FaPencil  style={{cursor:'pointer'}}  className="spacer" onClick={ () => this.showCommentDialog( post.id , comment.body , comment.author, comment.voteScore ) } />
                                              <div className="comment-body">{comment.body}</div>
 
                                                 <button className={"post-voteScore " + this.voted(comment.id)} 
                                                onClick={ () => this.toggleVote(comment.id) } >{comment.voteScore} </button>
                                                 
-                                                <FaArrowUp className="spacer" onClick={ () => this.upvote(comment.id) } />
-                                                <FaArrowDown className="spacer" onClick={ () => this.downvote(comment.id) } />
+                                                <FaArrowUp className="spacer" onClick={ () => this.props.upVoteComment(comment.id) } />
+                                                <FaArrowDown className="spacer" onClick={ () => this.props.downVoteComment(comment.id) } />
                                                 
                                             </div>
                                             <br />
@@ -231,7 +275,6 @@ class Default extends Component {
                                   )
                                 : null
                               }
-                              <div style={{cursor:'pointer'}}  className="empty"  onClick={ () => this.showCommentDialog( post.id ) } >Comment + </div> 
 
                               </div>
                             </div>
@@ -240,7 +283,6 @@ class Default extends Component {
                     ) 
                     : null
                   }
-                  <div style={{cursor:'pointer'}}  className="empty" onClick={ () => this.showPostDialog( cat.name  ) } >Post +</div> 
 
               </div>
             )
@@ -262,9 +304,13 @@ class Default extends Component {
                     <input className="inputField" type="text" placeholder="Author" autoFocus
                     value={this.state.modalAuthor}
                     onChange={ (event) => this.setState( { modalAuthor: event.target.value })} />
-                    <input className="inputField" type="text" placeholder="Title"
-                    value={this.state.modalTitle}
-                    onChange={ (event) => this.setState( { modalTitle: event.target.value })} />
+
+                    { this.state.isShowingTitle 
+                      ?
+                      <input className="inputField" type="text" placeholder="Title"
+                      value={this.state.modalTitle}
+                      onChange={ (event) => this.setState( { modalTitle: event.target.value })} />
+                      : null }
                     <textarea className="textareaInput" rows={5} placeholder="Enter here" defaultValue={""}
                     defaultValue={this.state.modalBody}
                     onChange={ (event) => this.setState( {modalBody: event.target.value })}/>
@@ -295,8 +341,11 @@ function mapDispatchToProps (dispatch) {
     addPost: (data) => dispatch(addPost(data)),
     addCategory: (data) => dispatch(addCategory(data)),
 
-    downVote: (data) => dispatch(downVote(data)),
-    upVote: (data) => dispatch(upVote(data)),
+    downVotePost: (data) => dispatch(downVotePost(data)),
+    upVotePost: (data) => dispatch(upVotePost(data)),
+
+    downVoteComment: (data) => dispatch(downVoteComment(data)),
+    upVoteComment: (data) => dispatch(upVoteComment(data)),
 
   }
 }
