@@ -8,6 +8,12 @@ export const DOWNVOTE_COMMENT = 'DOWNVOTE_COMMENT'
 export const UPVOTE_COMMENT = 'UPVOTE_COMMENT'
 export const DOWNVOTE_POST = 'DOWNVOTE_POST'
 export const UPVOTE_POST = 'UPVOTE_POST'
+export const SORT_POSTS = 'SORT_POSTS'
+export const SORT_COMMENTS = 'SORT_COMMENTS'
+
+// other constants
+export const SORT_BY_TIMESTAMP = 1
+export const SORT_BY_VOTE_SCORE = 2
 
 export function addComment ( comment ) {
   return {
@@ -78,5 +84,20 @@ export function fetchComments ( comments ) {
   return {
     type: FETCH_COMMENTS,
     comments
+  }
+}
+
+export function sortPosts ( postsSortOrder ) {
+  return {
+    type: SORT_POSTS,
+    postsSortOrder
+  }
+}
+
+
+export function sortComments ( commentsSortOrder ) {
+  return {
+    type: SORT_COMMENTS,
+    commentsSortOrder
   }
 }

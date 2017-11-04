@@ -2,7 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import {  addComment, addCategory, addPost, 
           downVotePost, upVotePost,  
-          downVoteComment, upVoteComment} from '../actions'
+          downVoteComment, upVoteComment,
+          sortPosts, sortComments } from '../actions'
+
+import { SORT_BY_TIMESTAMP, SORT_BY_VOTE_SCORE } from '../actions'
 
 import changeCase from 'change-case'
 
@@ -11,8 +14,7 @@ import { FaArrowUp, FaArrowDown, FaPencil, FaPlus, FaSort } from 'react-icons/li
 
 import { Modal, Button, Row, Grid, DropdownButton, MenuItem } from 'react-bootstrap';
 
-const SORT_BY_TIMESTAMP = 1
-const SORT_BY_VOTE_SCORE = 2
+
 
 
 const uuidv1 = require('uuid/v1');
@@ -104,7 +106,7 @@ class Default extends Component {
 
   }
 
-  sortPosts(fieldName) {
+  WillsortPosts(fieldName) {
     alert('will sort by ' + fieldName);
   }
 
@@ -177,6 +179,7 @@ class Default extends Component {
     const { categories, posts, comments, addComment, addPost, 
             addCategory, downVotePost, upVotePost,  
             downVoteComment, upVoteComment,  
+            sortPosts, sortComments
           } = this.props
 
     const myFaSort =  <FaSort style={{cursor:'pointer'}} className="spacer" /> 
@@ -201,8 +204,8 @@ class Default extends Component {
                   
                   <DropdownButton className="simpleButton" bsStyle="default" title={myFaSort} noCaret id="dropdown-no-caret">
 
-                      <MenuItem eventKey="1" onSelect={ () => this.sortPosts( "Timestamp"  ) }>Timestamp</MenuItem>
-                      <MenuItem eventKey="2" onSelect={ () => this.sortPosts( "Vote Score"  ) }>Vote Score</MenuItem>
+                      <MenuItem eventKey="1" onSelect={ () => this.props.sortPosts( SORT_BY_TIMESTAMP  ) }>Timestamp</MenuItem>
+                      <MenuItem eventKey="2" onSelect={ () => this.props.sortPosts( SORT_BY_VOTE_SCORE ) }>Vote Score</MenuItem>
 
                   </DropdownButton>
 
@@ -353,6 +356,10 @@ function mapDispatchToProps (dispatch) {
 
     downVoteComment: (data) => dispatch(downVoteComment(data)),
     upVoteComment: (data) => dispatch(upVoteComment(data)),
+
+    sortComments: (data) => dispatch(sortComments(data)),
+    sortPosts: (data) => dispatch(sortPosts(data)),
+
 
   }
 }
