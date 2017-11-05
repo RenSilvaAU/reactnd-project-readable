@@ -6,10 +6,12 @@ import {
   UPDATE_COMMENT,
   ADD_CATEGORY,
   ADD_POST,
+  DEL_POST,
   UPDATE_POST,
   INIT_CATEGORIES,
   INIT_POSTS,
-  FETCH_COMMENTS,  
+  FETCH_COMMENTS,
+  DEL_COMMENT,  
   DOWNVOTE_POST,
   UPVOTE_POST,
   DOWNVOTE_COMMENT,
@@ -26,7 +28,7 @@ function comments (state = {}, action) {
 
       return {
         ...state,
-        comments: state.comments.concat(comment),
+        comments: state.comments.concat(comment).filter( (comment) => comment.deleted !== true ),
       }
 
 
@@ -43,7 +45,7 @@ function comments (state = {}, action) {
                         ? {...comment, author: updComment.author,
                                        body: updComment.body }
                         : comment
-                        )})
+                        )}).filter( (comment) => comment.deleted !== true )
 
         }
 
@@ -59,7 +61,7 @@ function comments (state = {}, action) {
                           comment.id === upCommentId
                         ? {...comment, voteScore: comment.voteScore  + 1 }
                         : comment
-                        )})
+                        )}).filter( (comment) => comment.deleted !== true )
 
         }
 
@@ -75,10 +77,25 @@ function comments (state = {}, action) {
                           comment.id === downCommentId
                         ? {...comment, voteScore: comment.voteScore  - 1 }
                         : comment
-                        )})
+                        )}).filter( (comment) => comment.deleted !== true )
 
         }
 
+    case DEL_COMMENT:
+    
+      const { delCommentId } = action
+
+      return {
+        ...state,
+       comments: state.comments.map(
+           (comment) => { 
+                          return (
+                          comment.id === delCommentId
+                        ? {...comment, deleted: true }
+                        : comment
+                        )}).filter( (comment) => comment.deleted !== true )
+
+        }
     case FETCH_COMMENTS:
 
       const { comments } = action;
@@ -92,7 +109,7 @@ function comments (state = {}, action) {
 
         return {
           ...state,
-          comments: state.comments.concat(comments),
+          comments: state.comments.concat(comments).filter( (comment) => comment.deleted !== true ),
         }
 
       }
@@ -128,7 +145,7 @@ function posts (state = {}, action) {
       const { post } = action
       return {
         ...state,
-        posts: state.posts.concat(post),
+        posts: state.posts.concat(post).filter( (post) => post.deleted !== true ),
       }
 
     case UPDATE_POST:
@@ -145,7 +162,7 @@ function posts (state = {}, action) {
                                     author: updPost.author,
                                     body: updPost.body }
                         : post
-                        )})
+                        )}).filter( (post) => post.deleted !== true )
 
         }
     case UPVOTE_POST:
@@ -161,7 +178,7 @@ function posts (state = {}, action) {
                           post.id === upPostId
                         ? {...post, voteScore: post.voteScore  + 1 }
                                    : post
-                        )})
+                        )}).filter( (post) => post.deleted !== true )
 
         }
       
@@ -178,15 +195,30 @@ function posts (state = {}, action) {
                           post.id === downPostId
                         ? {...post, voteScore: post.voteScore  - 1 }
                                    : post
-                        )})
+                        )}).filter( (post) => post.deleted !== true )
 
         }
 
+    case DEL_POST:
+    
+      const { delPostId } = action
+
+      return {
+        ...state,
+       posts: state.posts.map(
+           (post) => { 
+                          return (
+                          post.id === delPostId
+                        ? {...post, deleted: true }
+                        : post
+                        )}).filter( (post) => post.deleted !== true )
+
+        }
     case INIT_POSTS:
       const { posts } = action
       return {
         ...state,
-        posts: posts,
+        posts: posts.filter( (post) => post.deleted !== true ),
       }
     default :
       return state

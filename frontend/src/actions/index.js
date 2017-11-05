@@ -1,6 +1,9 @@
 export const ADD_COMMENT = 'ADD_COMMENT'
 export const ADD_CATEGORY = 'ADD_CATEGORY'
 export const ADD_POST = 'ADD_POST'
+export const DEL_COMMENT = 'DEL_COMMENT'
+export const DEL_POST = 'DEL_POST'
+
 export const UPDATE_POST = 'UPDATE_POST'
 export const UPDATE_COMMENT = 'UPDATE_COMMENT'
 export const INIT_CATEGORIES = 'INIT_CATEGORIES'
@@ -23,6 +26,20 @@ export function addPost ( post ) {
   return {
     type: ADD_POST,
     post
+  }
+}
+
+export function delComment ( delCommentId ) {
+  return {
+    type: DEL_COMMENT,
+    delCommentId
+  }
+}
+
+export function delPost ( delPostId ) {
+  return {
+    type: DEL_POST,
+    delPostId
   }
 }
 

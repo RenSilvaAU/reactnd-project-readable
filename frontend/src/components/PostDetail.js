@@ -3,7 +3,8 @@ import { connect } from 'react-redux'
 import sortBy from 'sort-by' 
 
 import {  downVotePost, upVotePost,  
-          downVoteComment, upVoteComment } from '../actions'
+          downVoteComment, upVoteComment,
+          delPost, delComment } from '../actions'
 
 import CreateEdit from './CreateEdit'
 
@@ -12,7 +13,7 @@ import {
   ADD_POST,
 } from '../actions'
 
-import { FaArrowUp, FaArrowDown, FaPencil, FaPlus, FaSort } from 'react-icons/lib/fa'
+import { FaArrowUp, FaArrowDown, FaPencil, FaPlus, FaTrash, FaSort } from 'react-icons/lib/fa'
 
 import { DropdownButton, MenuItem } from 'react-bootstrap';
 
@@ -58,7 +59,7 @@ class PostDetail extends Component {
 
     const { comments,  
             downVotePost, upVotePost,  
-            downVoteComment, upVoteComment
+            downVoteComment, upVoteComment, delComment, delPost
            } = this.props
 
     const myFaSort =  <FaSort style={{cursor:'pointer'}} className="spacer" /> 
@@ -74,6 +75,8 @@ class PostDetail extends Component {
               <div className="cone"> 
                   <span className="post-author">{post.author}</span>
                    <FaPencil  style={{cursor:'pointer'}}  className="spacer" onClick={ () => this.showDialog( ADD_POST, this.props.cat.name, post ) } />
+                   <FaTrash  style={{cursor:'pointer'}}  className="spacer" onClick={ () => delPost( post.id ) } />
+
                   <div className="timestamp">{displayableDate(post.timestamp)}</div>
 
               </div>
@@ -117,6 +120,8 @@ class PostDetail extends Component {
                           <div className="cone">
                             <span className="comment-author">{comment.author}</span>
                             <FaPencil  style={{cursor:'pointer'}}  className="spacer" onClick={ () =>this.showDialog( ADD_COMMENT, this.props.cat.name, post, comment )  } />
+                            <FaTrash  style={{cursor:'pointer'}}  className="spacer" onClick={ () => delComment( comment.id ) } />
+
                             <div className="timestamp">{displayableDate(comment.timestamp)}</div>
 
                           </div>
@@ -189,7 +194,10 @@ function mapDispatchToProps (dispatch) {
     upVotePost: (data) => dispatch(upVotePost(data)),
 
     downVoteComment: (data) => dispatch(downVoteComment(data)),
-    upVoteComment: (data) => dispatch(upVoteComment(data))
+    upVoteComment: (data) => dispatch(upVoteComment(data)),
+
+    delPost: (data) => dispatch(delPost(data)),
+    delComment: (data) => dispatch(delComment(data))
 
 
   }
