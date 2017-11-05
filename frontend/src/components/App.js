@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 
 import { initCategories, initPosts, fetchComments } from '../actions'
 
-import logo from '../logo.svg';
 import '../App.css';
 
 import { Route } from 'react-router-dom'
@@ -73,9 +72,7 @@ class App extends Component {
 
   render() {
 
-    const {  initCategories, initPosts, fetchComments, posts} = this.props
-
-    return (
+     return (
       
       <div className="app">
 

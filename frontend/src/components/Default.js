@@ -1,18 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
+import sortBy from 'sort-by'
+
 import {  addComment, addCategory, addPost, 
           downVotePost, upVotePost,  
-          downVoteComment, upVoteComment,
-          sortPosts, sortComments } from '../actions'
-
-import { SORT_BY_TIMESTAMP, SORT_BY_VOTE_SCORE } from '../actions'
+          downVoteComment, upVoteComment } from '../actions'
 
 import changeCase from 'change-case'
 
 import { FaArrowUp, FaArrowDown, FaPencil, FaPlus, FaSort } from 'react-icons/lib/fa'
 
 
-import { Modal, Button, Row, Grid, DropdownButton, MenuItem } from 'react-bootstrap';
+import { Modal, Button, DropdownButton, MenuItem } from 'react-bootstrap';
 
 
 
@@ -47,6 +46,9 @@ class Default extends Component {
     modalAuthor : "",
     modalCategory : "",
     modalPostId : null,
+
+    postsOrder : 'timestamp',
+    commentsOrder: 'timestamp',
 
   }
 
@@ -176,11 +178,10 @@ class Default extends Component {
   }
   render() {
 
-    const { categories, posts, comments, addComment, addPost, 
-            addCategory, downVotePost, upVotePost,  
-            downVoteComment, upVoteComment,  
-            sortPosts, sortComments
-          } = this.props
+    const { categories, posts, comments,  
+            downVotePost, upVotePost,  
+            downVoteComment, upVoteComment
+           } = this.props
 
     const myFaSort =  <FaSort style={{cursor:'pointer'}} className="spacer" /> 
 
@@ -204,8 +205,8 @@ class Default extends Component {
                   
                   <DropdownButton className="simpleButton" bsStyle="default" title={myFaSort} noCaret id="dropdown-no-caret">
 
-                      <MenuItem eventKey="1" onSelect={ () => this.props.sortPosts( SORT_BY_TIMESTAMP  ) }>Timestamp</MenuItem>
-                      <MenuItem eventKey="2" onSelect={ () => this.props.sortPosts( SORT_BY_VOTE_SCORE ) }>Vote Score</MenuItem>
+                      <MenuItem eventKey="1" onSelect={ () => this.setState( { postsOrder: 'timestamp' } ) }>Timestamp</MenuItem>
+                      <MenuItem eventKey="2" onSelect={ () => this.setState( { postsOrder: 'voteScore' } ) }>Vote Score</MenuItem>
 
                   </DropdownButton>
 
@@ -215,7 +216,7 @@ class Default extends Component {
 
                     ? // then
 
-                    ( posts.filter( (post) => (post.category === cat.name)).map( (post) => {
+                    ( posts.filter( (post) => (post.category === cat.name)).sort(sortBy(this.state.postsOrder)).map( (post) => {
                         return (
                           <div key={post.id}>
 
@@ -238,13 +239,21 @@ class Default extends Component {
                                 <button className={"post-voteScore " + this.voted(post.id)} 
                                      onClick={ () => this.toggleVote(post.id) } >{post.voteScore} </button>
                                        
-                                <FaArrowUp  style={{cursor:'pointer'}}   className="spacer" onClick={ () => this.props.upVotePost(post.id) } />
-                                <FaArrowDown style={{cursor:'pointer'}}  className="spacer" onClick={ () => this.props.downVotePost(post.id) } />
+                                <FaArrowUp  style={{cursor:'pointer'}}   className="spacer" onClick={ () => upVotePost(post.id) } />
+                                <FaArrowDown style={{cursor:'pointer'}}  className="spacer" onClick={ () => downVotePost(post.id) } />
                            
                                 <div className="grid-wrapper subSubHead">
                                   <div className="cone">Comments</div>
                                   <div className="ctwo">
                                     <FaPlus style={{cursor:'pointer'}}  className="empty"  onClick={ () => this.showCommentDialog( post.id ) } />
+ 
+                                    <DropdownButton className="simpleButton" bsStyle="default" title={myFaSort} noCaret id="dropdown-no-caret">
+
+                                        <MenuItem eventKey="1" onSelect={ () => this.setState( { commentsOrder: 'timestamp' } ) }>Timestamp</MenuItem>
+                                        <MenuItem eventKey="2" onSelect={ () => this.setState( { commentsOrder: 'voteScore' } ) }>Vote Score</MenuItem>
+
+                                    </DropdownButton>
+ 
                                   </div> 
                                 </div>
                                 { ( comments && comments.filter( (comment) => (comment.parentId === post.id)).length > 0 ) 
@@ -254,7 +263,7 @@ class Default extends Component {
                                   <div>
    
                                     <div className="comments">
-                                    { comments.filter( (comment) => (comment.parentId === post.id)).map( (comment) => {
+                                    { comments.filter( (comment) => (comment.parentId === post.id)).sort(sortBy(this.state.commentsOrder)).map( (comment) => {
                                       return (
                                         <div className="grid-wrapper" key={comment.id}>
                                           <div className="cone">
@@ -270,8 +279,8 @@ class Default extends Component {
                                                 <button className={"post-voteScore " + this.voted(comment.id)} 
                                                onClick={ () => this.toggleVote(comment.id) } >{comment.voteScore} </button>
                                                 
-                                                <FaArrowUp className="spacer" onClick={ () => this.props.upVoteComment(comment.id) } />
-                                                <FaArrowDown className="spacer" onClick={ () => this.props.downVoteComment(comment.id) } />
+                                                <FaArrowUp className="spacer" onClick={ () => upVoteComment(comment.id) } />
+                                                <FaArrowDown className="spacer" onClick={ () => downVoteComment(comment.id) } />
                                                 
                                             </div>
                                             <br />
@@ -321,7 +330,7 @@ class Default extends Component {
                       value={this.state.modalTitle}
                       onChange={ (event) => this.setState( { modalTitle: event.target.value })} />
                       : null }
-                    <textarea className="textareaInput" rows={5} placeholder="Enter here" defaultValue={""}
+                    <textarea className="textareaInput" rows={5} placeholder="Enter here"
                     defaultValue={this.state.modalBody}
                     onChange={ (event) => this.setState( {modalBody: event.target.value })}/>
           
@@ -355,10 +364,7 @@ function mapDispatchToProps (dispatch) {
     upVotePost: (data) => dispatch(upVotePost(data)),
 
     downVoteComment: (data) => dispatch(downVoteComment(data)),
-    upVoteComment: (data) => dispatch(upVoteComment(data)),
-
-    sortComments: (data) => dispatch(sortComments(data)),
-    sortPosts: (data) => dispatch(sortPosts(data)),
+    upVoteComment: (data) => dispatch(upVoteComment(data))
 
 
   }

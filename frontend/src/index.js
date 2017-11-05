@@ -12,11 +12,7 @@ import { BrowserRouter } from 'react-router-dom';
 // redux
 import { createStore } from 'redux'
 import reducer from './reducers'
-
 import { Provider } from 'react-redux'
-
-import registerServiceWorker from './registerServiceWorker';
-
 
 const store = createStore(
   reducer,

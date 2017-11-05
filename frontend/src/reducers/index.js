@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux'
-import sortBy from 'sort-by'
+
 
 import {
   ADD_COMMENT,
@@ -11,47 +11,12 @@ import {
   DOWNVOTE_POST,
   UPVOTE_POST,
   DOWNVOTE_COMMENT,
-  UPVOTE_COMMENT,
-  SORT_POSTS,
-  SORT_COMMENTS,
-  SORT_BY_VOTE_SCORE,
-  SORT_BY_TIMESTAMP
+  UPVOTE_COMMENT
 
 } from '../actions'
 
 function comments (state = {}, action) {
   switch (action.type) {
-
-    case SORT_COMMENTS:
-
-      const { commentsSortOrder } = action
-
-
-      switch(commentsSortOrder){
-
-        case SORT_BY_TIMESTAMP:
-
-            return {
-              ...state,
-              comments: state.comments.sort(sortBy('timestamp')),
-            }
-
-          break;
-
-        case SORT_BY_VOTE_SCORE:
-
-            return {
-              ...state,
-              comments: state.comments.sort(sortBy('voteScore')),
-            }
-
-          break;
-
-        default:
-
-          return state      
-
-      }
 
     case ADD_COMMENT :
 
@@ -62,15 +27,12 @@ function comments (state = {}, action) {
         comments: state.comments.concat(comment),
       }
 
-      break;
-
     case UPVOTE_COMMENT:
     
       const { upCommentId } = action
 
       return {
         ...state,
-
        comments: state.comments.map(
            (comment) => { 
                           return (
@@ -81,9 +43,6 @@ function comments (state = {}, action) {
 
         }
 
-      break;
-
-      
     case DOWNVOTE_COMMENT:
     
       const { downCommentId } = action
@@ -99,8 +58,6 @@ function comments (state = {}, action) {
                         )})
 
         }
-
-      break;
 
     case FETCH_COMMENTS:
 
@@ -119,7 +76,6 @@ function comments (state = {}, action) {
         }
 
       }
-      break;
 
     default :
       return state
@@ -134,8 +90,6 @@ function categories (state = {}, action) {
         ...state,
         categories: state.categories.concat(category),
       }
-
-      break;
 
     case INIT_CATEGORIES:
       const { categories } = action
@@ -157,38 +111,6 @@ function posts (state = {}, action) {
         posts: state.posts.concat(post),
       }
 
-      break;
-
-    case SORT_POSTS:
-
-      const { postsSortOrder } = action
-
-
-      switch(postsSortOrder){
-
-        case SORT_BY_TIMESTAMP:
-
-            return {
-              ...state,
-              posts: state.posts.sort(sortBy('timestamp')),
-            }
-
-          break;
-
-        case SORT_BY_VOTE_SCORE:
-
-            return {
-              ...state,
-              posts: state.posts.sort(sortBy('voteScore')),
-            }
-
-          break;
-
-        default:
-
-          return state      
-
-      }
     case UPVOTE_POST:
     
       const { upPostId } = action
@@ -206,8 +128,6 @@ function posts (state = {}, action) {
 
         }
       
-       break;
-
     case DOWNVOTE_POST:
     
       const { downPostId } = action
@@ -224,9 +144,6 @@ function posts (state = {}, action) {
                         )})
 
         }
-
-
-      break;
 
     case INIT_POSTS:
       const { posts } = action
