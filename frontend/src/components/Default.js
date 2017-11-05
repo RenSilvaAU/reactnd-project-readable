@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import sortBy from 'sort-by'
 
+import CreateEdit from './CreateEdit'
+
 import {  addComment, addCategory, addPost, 
           downVotePost, upVotePost,  
           downVoteComment, upVoteComment } from '../actions'
@@ -11,7 +13,7 @@ import changeCase from 'change-case'
 import { FaArrowUp, FaArrowDown, FaPencil, FaPlus, FaSort } from 'react-icons/lib/fa'
 
 
-import { Modal, Button, DropdownButton, MenuItem } from 'react-bootstrap';
+import { DropdownButton, MenuItem } from 'react-bootstrap';
 
 
 
@@ -35,17 +37,18 @@ class Default extends Component {
     myvotes : { },
 
     isShowingDialog : false,
-    isShowingTitle : false,
 
     modalFormTitle : "Comment",
 
-    postCallBack : null,
+//    postCallBack : null,
 
     modalTitle : "",
     modalBody  : "",
     modalAuthor : "",
     modalCategory : "",
     modalPostId : null,
+    isShowingTitle : false,
+
 
     postsOrder : 'timestamp',
     commentsOrder: 'timestamp',
@@ -312,41 +315,19 @@ class Default extends Component {
 
         {this.state.isShowingDialog ?
 
-          <form>
-            <Modal.Dialog>
-              <Modal.Header>
-                <Modal.Title>{this.state.modalFormTitle}</Modal.Title>
-              </Modal.Header>
+          <CreateEdit 
 
-              <Modal.Body>
+            modalTitle = {this.state.modalTitle}
+            modalBody  = {this.state.modalBody}
+            modalAuthor = {this.state.modalAuthor}
+            modalCategory = {this.state.modalCategory}
+            modalPostId = {this.state.modalPostId}
+            isShowingTitle = {this.state.isShowingTitle}
+            postCallBack = {this.state.postCallback}
+            hideDialog = {this.hideDialog}
 
-                    <input className="inputField" type="text" placeholder="Author" autoFocus
-                    value={this.state.modalAuthor}
-                    onChange={ (event) => this.setState( { modalAuthor: event.target.value })} />
+          />
 
-                    { this.state.isShowingTitle 
-                      ?
-                      <input className="inputField" type="text" placeholder="Title"
-                      value={this.state.modalTitle}
-                      onChange={ (event) => this.setState( { modalTitle: event.target.value })} />
-                      : null }
-                    <textarea className="textareaInput" rows={5} placeholder="Enter here"
-                    defaultValue={this.state.modalBody}
-                    onChange={ (event) => this.setState( {modalBody: event.target.value })}/>
-          
-              </Modal.Body>
-
-              <Modal.Footer>
-                <Button onClick={ () => this.hideDialog() }>Close</Button>
-                <Button type="submit" bsStyle="primary" 
-                onClick={ () => { 
-                  this.state.postCallBack(this.state.post, this);
-                  this.hideDialog()
-                 } 
-               }>Post</Button>
-              </Modal.Footer>
-            </Modal.Dialog>
-          </form>
           : null
         }
       </div>
