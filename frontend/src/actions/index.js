@@ -1,6 +1,8 @@
 export const ADD_COMMENT = 'ADD_COMMENT'
 export const ADD_CATEGORY = 'ADD_CATEGORY'
 export const ADD_POST = 'ADD_POST'
+export const UPDATE_POST = 'UPDATE_POST'
+export const UPDATE_COMMENT = 'UPDATE_COMMENT'
 export const INIT_CATEGORIES = 'INIT_CATEGORIES'
 export const INIT_POSTS = 'INIT_POSTS'
 export const FETCH_COMMENTS = 'FETCH_COMMENTS'
@@ -21,6 +23,20 @@ export function addPost ( post ) {
   return {
     type: ADD_POST,
     post
+  }
+}
+
+export function updateComment ( updComment ) {
+  return {
+    type: UPDATE_COMMENT,
+    updComment
+  }
+}
+
+export function updatePost ( updPost ) {
+  return {
+    type: UPDATE_POST,
+    updPost
   }
 }
 

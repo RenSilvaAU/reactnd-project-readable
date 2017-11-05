@@ -40,7 +40,7 @@
   width:100%;
   max-width: 1070px;
   box-sizing: border-box;
-
+  z-index:99;
 }
 
 .fixed {
