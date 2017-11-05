@@ -8,7 +8,7 @@ import '../App.css';
 import { Route } from 'react-router-dom'
 
 import Category from './Category'
-import CreateEdit from './CreateEdit'
+
 import Default from './Default'
 import PostDetail from './PostDetail'
 
@@ -100,14 +100,6 @@ class App extends Component {
 
               )}/>
 
-            <Route exact path="/edit"
-
-              render={( {history} )=> (
-
-                // list this user's selected books
-                <CreateEdit  />
-
-              )}/>
 
             <Route exact path="/post"
 

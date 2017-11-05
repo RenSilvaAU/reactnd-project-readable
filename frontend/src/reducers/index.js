@@ -3,8 +3,10 @@ import { combineReducers } from 'redux'
 
 import {
   ADD_COMMENT,
+  UPDATE_COMMENT,
   ADD_CATEGORY,
   ADD_POST,
+  UPDATE_POST,
   INIT_CATEGORIES,
   INIT_POSTS,
   FETCH_COMMENTS,  
@@ -26,6 +28,24 @@ function comments (state = {}, action) {
         ...state,
         comments: state.comments.concat(comment),
       }
+
+
+    case UPDATE_COMMENT:
+    
+      const { updComment } = action
+
+      return {
+        ...state,
+       comments: state.comments.map(
+           (comment) => { 
+                          return (
+                          comment.id === updComment.id
+                        ? {...comment, author: updComment.author,
+                                       body: updComment.body }
+                        : comment
+                        )})
+
+        }
 
     case UPVOTE_COMMENT:
     
@@ -111,6 +131,23 @@ function posts (state = {}, action) {
         posts: state.posts.concat(post),
       }
 
+    case UPDATE_POST:
+    
+      const { updPost } = action
+
+      return {
+        ...state,
+       posts: state.posts.map(
+           (post) => { 
+                          return (
+                          post.id === updPost.id
+                        ? {...post, title: updPost.title,
+                                    author: updPost.author,
+                                    body: updPost.body }
+                        : post
+                        )})
+
+        }
     case UPVOTE_POST:
     
       const { upPostId } = action
