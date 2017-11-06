@@ -1,7 +1,7 @@
 # reactnd-project-readable
 
 ##### Ren Silva [ren.j.silva@outlook.com](mailto:ren.j.silva@outllook.com)
-This **MyReads** app is Ren Silva's  project for Udacity's React Fundamentals course,
+This **Readable** app is Ren Silva's  project for Udacity's React Fundamentals course,
 
 ## App Purpose
 
