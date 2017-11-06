@@ -28,7 +28,7 @@ class CreateEdit extends Component {
     modalPost :     this.props.modalPost,
     modalComment :  this.props.modalComment,
 
-    modalVoteScore : 0,
+    modalVoteScore : 1,
 
     modalTitle :    this.getTitle() ,
     modalBody  :    this.getBody()  ,

@@ -36,7 +36,6 @@ class App extends Component {
     fetch(url, { headers: { 'Authorization': 'whatever-you-want' }} )
       .then( (res) => { return(res.text()) })
       .then((data) => { 
-
         this.props.initCategories( JSON.parse(data).categories )
       });
 

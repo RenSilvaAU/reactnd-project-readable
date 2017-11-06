@@ -1,3 +1,6 @@
+
+import * as api from '../utils/api.js'
+
 export const ADD_COMMENT = 'ADD_COMMENT'
 export const ADD_CATEGORY = 'ADD_CATEGORY'
 export const ADD_POST = 'ADD_POST'
@@ -16,6 +19,11 @@ export const UPVOTE_POST = 'UPVOTE_POST'
 
 
 export function addComment ( comment ) {
+
+  api.addComment(comment).then(
+    (res) => { console.log('Result', res.status)}
+  )
+
   return {
     type: ADD_COMMENT,
     comment
@@ -23,6 +31,12 @@ export function addComment ( comment ) {
 }
 
 export function addPost ( post ) {
+
+  api.addPost(post).then(
+    (res) => { console.log('Result', res.status)}
+  )
+
+  // will add the post to the list anyway
   return {
     type: ADD_POST,
     post
@@ -30,6 +44,10 @@ export function addPost ( post ) {
 }
 
 export function delComment ( delCommentId ) {
+
+  api.delComment(delCommentId).then(
+    (res) => { console.log('Result', res.status)}
+  )
   return {
     type: DEL_COMMENT,
     delCommentId
@@ -37,6 +55,11 @@ export function delComment ( delCommentId ) {
 }
 
 export function delPost ( delPostId ) {
+
+  api.delPost(delPostId).then(
+    (res) => { console.log('Result', res.status)}
+  )
+
   return {
     type: DEL_POST,
     delPostId
@@ -44,6 +67,11 @@ export function delPost ( delPostId ) {
 }
 
 export function updateComment ( updComment ) {
+
+  api.updComment(updComment).then(
+    (res) => { console.log('Result', res.status)}
+  )
+
   return {
     type: UPDATE_COMMENT,
     updComment
@@ -51,6 +79,11 @@ export function updateComment ( updComment ) {
 }
 
 export function updatePost ( updPost ) {
+
+  api.updPost(updPost).then(
+    (res) => { console.log('Result', res.status)}
+  )
+
   return {
     type: UPDATE_POST,
     updPost
@@ -79,6 +112,12 @@ export function initPosts ( posts ) {
 }
 
 export function downVotePost ( downPostId ) {
+
+  api.votePost(downPostId,"downVote").then(
+    (res) => { console.log('Result', res.status)}
+  )
+
+
   return {
     type: DOWNVOTE_POST,
     downPostId
@@ -87,6 +126,11 @@ export function downVotePost ( downPostId ) {
 
 
 export function upVotePost ( upPostId ) {
+
+  api.votePost(upPostId,"upVote").then(
+    (res) => { console.log('Result', res.status)}
+  )
+
   return {
     type: UPVOTE_POST,
     upPostId
@@ -94,6 +138,11 @@ export function upVotePost ( upPostId ) {
 }
 
 export function downVoteComment ( downCommentId ) {
+
+  api.voteComment(downCommentId,"downVote").then(
+    (res) => { console.log('Result', res.status)}
+  )
+
   return {
     type: DOWNVOTE_COMMENT,
     downCommentId
@@ -102,6 +151,12 @@ export function downVoteComment ( downCommentId ) {
 
 
 export function upVoteComment ( upCommentId ) {
+
+  api.voteComment(upCommentId,"upVote").then(
+    (res) => { console.log('Result', res.status)}
+  )
+
+
   return {
     type: UPVOTE_COMMENT,
     upCommentId
