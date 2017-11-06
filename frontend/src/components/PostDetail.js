@@ -54,6 +54,15 @@ class PostDetail extends Component {
     this.setState( {isShowingDialog: false})
   }
 
+  noOfComments(postId) {
+
+    if (!this.props.comments) {
+      return 0
+    } else {
+      return this.props.comments.filter( (comment) => (comment.parentId === postId)).length ;
+    }
+  }
+
   render() {
 
     const { comments,  
@@ -93,7 +102,7 @@ class PostDetail extends Component {
                 <FaArrowDown style={{cursor:'pointer'}}  className="spacer" onClick={ () => downVotePost(post.id) } />
            
                 <div className="grid-wrapper subSubHead">
-                  <div className="cone">Comments</div>
+                  <div className="cone">Comments ({this.noOfComments(post.id)})</div>
                   <div className="ctwo">
                     <FaPlus style={{cursor:'pointer'}}  className="hotTag"  onClick={ () => this.showDialog( ADD_COMMENT, this.props.cat.name, post ) } />
 

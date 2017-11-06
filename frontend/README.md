@@ -8,7 +8,7 @@ This **Readable** app is Ren Silva's  project for Udacity's React Fundamentals c
 The app lets the users create, edit and delete posts, comment on othrers' posts, and vote on others' posts and comemnts.
 
 
-It has four views:
+It has four major components:
 
 ### Default (Root)
 Lists all available categories, which link to a category view for that category
@@ -25,13 +25,11 @@ identical to the default view, but filtered to only include posts with the selec
 
 ### Post Detail View
 Modal view with details of a post, including: Title, Body, Author, timestamp (in user readable format), and vote score
-
 The Post Detail, Create and Edit views were implemented as modal, using Bootstrap modal
 
 ### Create/Edit View
 Forms to create posts/comments or edit existing posts/comments
-
- Posts should display the number of comments associated with the post.
+Posts display the number of comments associated with the post.
 
 
 ## Build status
