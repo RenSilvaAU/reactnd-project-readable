@@ -1,8 +1,8 @@
-
+export const REACT_APP_BACKEND="http://localhost:3001"
 
 export function addPost (post) {
 
-const url = `${process.env.REACT_APP_BACKEND}/posts`;
+const url = `${REACT_APP_BACKEND}/posts`;
 console.log('saving post', url);
 
   return fetch(url, 
@@ -16,7 +16,7 @@ console.log('saving post', url);
 
 export function updPost (post) {
 
-	const url = `${process.env.REACT_APP_BACKEND}/posts/${post.id}`;
+	const url = `${REACT_APP_BACKEND}/posts/${post.id}`;
 	console.log('updating post', url);
 
   	return fetch(url, 
@@ -34,7 +34,7 @@ export function updPost (post) {
 
 export function delPost (delPostId) {
 
-	const url = `${process.env.REACT_APP_BACKEND}/posts/${delPostId}`;
+	const url = `${REACT_APP_BACKEND}/posts/${delPostId}`;
 	console.log('deleting post', url);
 
   	return fetch(url, 
@@ -53,7 +53,7 @@ export function delPost (delPostId) {
 
 export function addComment (comment) {
 
-const url = `${process.env.REACT_APP_BACKEND}/comments`;
+const url = `${REACT_APP_BACKEND}/comments`;
 console.log('saving comment', url);
 
   return fetch(url, 
@@ -68,7 +68,7 @@ console.log('saving comment', url);
 
 export function updComment (comment) {
 
-	const url = `${process.env.REACT_APP_BACKEND}/comments/${comment.id}`;
+	const url = `${REACT_APP_BACKEND}/comments/${comment.id}`;
 	console.log('updating comment', url);
 
   	return fetch(url, 
@@ -86,7 +86,7 @@ export function updComment (comment) {
 
 export function delComment (delCommentId) {
 
-	const url = `${process.env.REACT_APP_BACKEND}/comments/${delCommentId}`;
+	const url = `${REACT_APP_BACKEND}/comments/${delCommentId}`;
 	console.log('deleting comment', url);
 
   	return fetch(url, 
@@ -101,7 +101,7 @@ export function delComment (delCommentId) {
 
 export function voteComment (commentId, option ) {
 
-	const url = `${process.env.REACT_APP_BACKEND}/comments/${commentId}`;
+	const url = `${REACT_APP_BACKEND}/comments/${commentId}`;
 	console.log('updating comment', url);
 
   	return fetch(url, 
@@ -116,7 +116,7 @@ export function voteComment (commentId, option ) {
 
 export function votePost (postId, option ) {
 
-	const url = `${process.env.REACT_APP_BACKEND}/posts/${postId}`;
+	const url = `${REACT_APP_BACKEND}/posts/${postId}`;
 	console.log('updating comment', url);
 
   	return fetch(url, 

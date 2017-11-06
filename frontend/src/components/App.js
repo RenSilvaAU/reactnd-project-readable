@@ -5,6 +5,8 @@ import { initCategories, initPosts, fetchComments } from '../actions'
 
 import '../App.css';
 
+import { REACT_APP_BACKEND } from '../utils/api'
+
 import Default from './Default'
 
 
@@ -13,7 +15,7 @@ class App extends Component {
 
   getComments(postId) {
 
-        const url = `${process.env.REACT_APP_BACKEND}/posts/${postId}/comments`;        
+        const url = `${REACT_APP_BACKEND}/posts/${postId}/comments`;        
 
         fetch(url, { headers: { 'Authorization': 'whatever-you-want' }} )
           .then( (res) => { return(res.text()) })
@@ -31,7 +33,7 @@ class App extends Component {
   componentDidMount() {
 
     // get categories
-    var url = `${process.env.REACT_APP_BACKEND}/categories`;
+    var url = `${REACT_APP_BACKEND}/categories`;
 
     fetch(url, { headers: { 'Authorization': 'whatever-you-want' }} )
       .then( (res) => { return(res.text()) })
@@ -40,7 +42,7 @@ class App extends Component {
       });
 
     // get posts
-    url = `${process.env.REACT_APP_BACKEND}/posts`;
+    url = `${REACT_APP_BACKEND}/posts`;
 
     fetch(url, { headers: { 'Authorization': 'whatever-you-want' }} )
       .then( (res) => { return(res.text()) })
