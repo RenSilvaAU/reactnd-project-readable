@@ -5,12 +5,8 @@ import { initCategories, initPosts, fetchComments } from '../actions'
 
 import '../App.css';
 
-import { Route } from 'react-router-dom'
-
-import Category from './Category'
-
 import Default from './Default'
-import PostDetail from './PostDetail'
+
 
 
 class App extends Component {
@@ -79,40 +75,14 @@ class App extends Component {
             <div className="container">
               <div className="top">
                <h1 className='header'>Readable</h1>
-              </div>
-            </div>
 
-            <Route exact path="/"
-
-              render={( {history} )=> (
-
-                // list this user's selected books
-                <Default  />
-
-              )}/>
-
-            <Route exact path="/category"
-
-              render={( {history} )=> (
-
-                // list this user's selected books
-                <Category  />
-
-              )}/>
-
-
-            <Route exact path="/post"
-
-              render={( {history} )=> (
-
-                // list this user's selected books
-                <PostDetail  />
-
-              )}/>
+              </div> 
+             <Default /> 
 
         </div>
+        </div>
 
-    );
+    )
   }
 }
 

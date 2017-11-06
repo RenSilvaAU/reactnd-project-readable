@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 import Category from './Category'
 
 
- 
+ import { FaArrowLeft } from 'react-icons/lib/fa'
 
 import changeCase from 'change-case'
 
@@ -18,7 +18,7 @@ class Default extends Component {
 
   state={
 
-
+    selectedCategory : null
 
   }
 
@@ -32,13 +32,21 @@ class Default extends Component {
     	<div className="container">
     	
           <div className="padding-top"></div>
+
+          { this.state.selectedCategory && 
+            <div><FaArrowLeft className="hotTag"  style={{cursor:'pointer'}} onClick={ () => this.setState({selectedCategory : null})} />
+              <span className="spacer">Back to all Categories</span>
+            </div>
+          }
+
                     
-          {categories && categories.map( (cat) => (
+          {categories && categories.filter( (cat) => { return this.state.selectedCategory ? cat.name === this.state.selectedCategory : cat } ).map( (cat) => (
 
               <div key={cat.name}>
                 <div className="grid-wrapper divider">
                 <div className="cone">
-                  <div className="subheader" >{changeCase.titleCase(cat.name)}</div>
+                  <div className="subheader hotTag"  style={{cursor:'pointer'}} 
+                        onClick={ () => this.setState( {selectedCategory : cat.name })}>{changeCase.titleCase(cat.name)}</div>
                 </div>
 
               <Category 
@@ -49,10 +57,6 @@ class Default extends Component {
             </div>
 
           ))}
-            
-            <p>a control for changing the sort method for the list, including at minimum, order by voteScore and order by timestamp</p>
-            <p>should have a control for adding a new post</p>
-
 
       </div>
     )

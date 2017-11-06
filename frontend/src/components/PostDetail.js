@@ -31,8 +31,7 @@ class PostDetail extends Component {
 
   state={
 
-  	postsOrder : 'timestamp',
-    commentsOrder: 'timestamp',
+    commentsOrder: '-voteScore',
 
     isShowingDialog : false,
     modalForm : ADD_POST,
@@ -96,12 +95,12 @@ class PostDetail extends Component {
                 <div className="grid-wrapper subSubHead">
                   <div className="cone">Comments</div>
                   <div className="ctwo">
-                    <FaPlus style={{cursor:'pointer'}}  className="empty"  onClick={ () => this.showDialog( ADD_COMMENT, this.props.cat.name, post ) } />
+                    <FaPlus style={{cursor:'pointer'}}  className="hotTag"  onClick={ () => this.showDialog( ADD_COMMENT, this.props.cat.name, post ) } />
 
                     <DropdownButton className="simpleButton" bsStyle="default" title={myFaSort} noCaret id="dropdown-no-caret">
 
                         <MenuItem eventKey="1" onSelect={ () => this.setState( { commentsOrder: 'timestamp' } ) }>Timestamp</MenuItem>
-                        <MenuItem eventKey="2" onSelect={ () => this.setState( { commentsOrder: 'voteScore' } ) }>Vote Score</MenuItem>
+                        <MenuItem eventKey="2" onSelect={ () => this.setState( { commentsOrder: '-voteScore' } ) }>Vote Score</MenuItem>
 
                     </DropdownButton>
 
@@ -168,20 +167,6 @@ class PostDetail extends Component {
           : null
       	}
 
-		{ false && (
-			<div>
-		    	<h2>Post Detail</h2>
-			     <div>
-						<p> should show the details of a post, including: Title, Body, Author, timestamp (in user readable format), and vote score</p>
-						<p> should list all of the comments for that post, ordered by voteScore (highest first)</p>
-						<p> should have controls to edit or delete the post</p>
-						<p> should have a control to add a new comment.</p>
-						<p> implement comment form however you want (inline, modal, etc.)</p>
-						<p> comments should also have controls for editing or deleting</p>
-			     </div>
-		     </div>
-		     )
-	 	}
     </div>
     );
   }

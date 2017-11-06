@@ -24,7 +24,9 @@ class Category extends Component {
     modalForm : ADD_POST,
     modalCategory : null,
     modalPost : null,
-    modalComment : null
+    modalComment : null,
+    postOrder: '-voteScore'
+
 
   }
 
@@ -54,12 +56,12 @@ class Category extends Component {
           <div className="ctwo">
 
                   <span className="subheader"></span>
-                  <FaPlus style={{cursor:'pointer'}}  className="empty" onClick={ () => this.showDialog(ADD_POST, this.props.cat.name) } /> 
+                  <FaPlus style={{cursor:'pointer'}}  className="hotTag" onClick={ () => this.showDialog(ADD_POST, this.props.cat.name) } /> 
                   
                   <DropdownButton className="simpleButton" bsStyle="default" title={myFaSort} noCaret id="dropdown-no-caret">
 
                       <MenuItem eventKey="1" onSelect={ () => this.setState( { postsOrder: 'timestamp' } ) }>Timestamp</MenuItem>
-                      <MenuItem eventKey="2" onSelect={ () => this.setState( { postsOrder: 'voteScore' } ) }>Vote Score</MenuItem>
+                      <MenuItem eventKey="2" onSelect={ () => this.setState( { postsOrder: '-voteScore' } ) }>Vote Score</MenuItem>
 
                   </DropdownButton>
 
