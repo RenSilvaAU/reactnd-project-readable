@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { Modal, Button } from 'react-bootstrap';
 
+import { withRouter } from 'react-router-dom';
 import {
   ADD_COMMENT,
   ADD_POST,
@@ -150,10 +151,22 @@ class CreateEdit extends Component {
     if (this.props.modalForm === ADD_POST ) {
         this.postPost();
         this.props.parent.hideDialog()
+
     } else if (this.props.modalForm === ADD_COMMENT ) {
         this.postComment();
         this.props.parent.hideDialog()
     } 
+  }
+
+  goBack() {
+
+        // accounting for potential router-based solution
+        try {
+            this.history.back()
+        } catch (e) {
+            //ok .. keep going 
+        }
+        this.props.parent.hideDialog()
   }
 
   render() {
@@ -187,9 +200,9 @@ class CreateEdit extends Component {
               </Modal.Body>
 
               <Modal.Footer>
-                <Button onClick={ () => this.props.parent.hideDialog() }>Close</Button>
+                <Button onClick={ () => { this.props.parent.hideDialog() } }>Close</Button>
                 <Button type="submit" bsStyle="primary" 
-                onClick={ () => {  this.post(this) } 
+                onClick={ () => { this.post(this) } 
                }>Post</Button>
               </Modal.Footer>
             </Modal.Dialog>
@@ -212,8 +225,8 @@ function mapStateToProps ({ posts, comments }) {
            comments: comments.comments }
 }
 
-export default  connect(
+export default  withRouter(connect(
   mapStateToProps,
   mapDispatchToProps
-)(CreateEdit);
+)(CreateEdit));
 

@@ -6,6 +6,8 @@ import {  downVotePost, upVotePost,
           downVoteComment, upVoteComment,
           delPost, delComment } from '../actions'
 
+import { Route, withRouter, Link } from 'react-router-dom'
+
 import CreateEdit from './CreateEdit'
 
 import {
@@ -82,6 +84,7 @@ class PostDetail extends Component {
             <div className="grid-wrapper">
               <div className="cone"> 
                   <span className="post-author">{post.author}</span>
+                   <Link to={`/${this.props.cat.name}/${post.id}`}><FaPencil className="spacer" /></Link>
                    <FaPencil  style={{cursor:'pointer'}}  className="spacer" onClick={ () => this.showDialog( ADD_POST, this.props.cat.name, post ) } />
                    <FaTrash  style={{cursor:'pointer'}}  className="spacer" onClick={ () => delPost( post.id ) } />
 
@@ -94,6 +97,24 @@ class PostDetail extends Component {
 
 
                 <div className="post-body">{post.body}</div>
+
+                <Route path={`/${this.props.cat.name}/${post.id}`}
+
+                    render={ ({history}) => ( 
+
+                      <CreateEdit 
+
+                        modalForm = { ADD_POST}
+                        modalCategory = {this.props.cat.name}
+                        modalPost = {post}
+                        modalComment = "" 
+                        parent = {this}
+
+                        isRouter = {true}
+
+                      /> 
+                )} />
+
 
 
                 <button className="post-voteScore">{post.voteScore} </button>
@@ -203,7 +224,7 @@ function mapStateToProps ({ categories, posts, comments }) {
            comments: comments.comments }
 }
 
-export default  connect(
+export default  withRouter(connect(
   mapStateToProps,
   mapDispatchToProps
-)(PostDetail);
+)(PostDetail));
