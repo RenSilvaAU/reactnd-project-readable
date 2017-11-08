@@ -1,6 +1,7 @@
 // react
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter } from 'react-router-dom';
 
 // app
 import App from './components/App'
@@ -19,7 +20,7 @@ const store = createStore(
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <BrowserRouter><App /></BrowserRouter>
   </Provider>,
   document.getElementById('root')
 )

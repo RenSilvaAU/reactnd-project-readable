@@ -140,6 +140,9 @@
   color: #33C4FF;
 }
 
+.hotTag:hover, a:-webkit-any-link {  
+  text-decoration:  none;
+}
 
 .grid-wrapper {
   display: grid;

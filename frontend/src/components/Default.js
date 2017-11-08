@@ -1,14 +1,10 @@
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-
+import { Route, withRouter } from 'react-router-dom'
 
 import Category from './Category'
 
-
- import { FaArrowLeft } from 'react-icons/lib/fa'
-
-import changeCase from 'change-case'
 
 
 
@@ -33,27 +29,32 @@ class Default extends Component {
     	
           <div className="padding-top"></div>
 
-          { this.state.selectedCategory && 
-            <div><FaArrowLeft className="hotTag"  style={{cursor:'pointer'}} onClick={ () => this.setState({selectedCategory : null})} />
-              <span className="spacer">Back to all Categories</span>
-            </div>
-          }
-
                     
           {categories && categories.filter( (cat) => { return this.state.selectedCategory ? cat.name === this.state.selectedCategory : cat } ).map( (cat) => (
 
-              <div key={cat.name}>
-                <div className="grid-wrapper divider">
-                <div className="cone">
-                  <div className="subheader hotTag"  style={{cursor:'pointer'}} 
-                        onClick={ () => this.setState( {selectedCategory : cat.name })}>{changeCase.titleCase(cat.name)}</div>
-                </div>
+            <div key={cat.name}>
+              <Route path={`/${cat.name}`}
 
-              <Category 
-                cat = {cat}
-              />
+                  render={ ({history}) => ( 
 
-            </div>
+                     <Category 
+                      cat = {cat}
+                      backButton = {true}
+                    />
+
+               )} />
+
+              <Route exact path="/"
+
+                  render={ ({history}) => ( 
+
+                     <Category 
+                      cat = {cat}
+                      backButton = {false}
+                    />
+
+               )} />
+
             </div>
 
           ))}
@@ -70,6 +71,6 @@ function mapStateToProps ({ categories, posts }) {
            posts:posts.posts}
 }
 
-export default  connect(
+export default  withRouter(connect(
   mapStateToProps
-)(Default);
+)(Default));
