@@ -1,27 +1,22 @@
-
+// common packages
 import React, { Component } from 'react';
-import { connect } from 'react-redux'
 import sortBy from 'sort-by'
+import { FaArrowLeft } from 'react-icons/lib/fa'
+import changeCase from 'change-case'
+import { Link, withRouter } from 'react-router-dom'
+import { DropdownButton, MenuItem } from 'react-bootstrap';
+import { FaPlus, FaSort } from 'react-icons/lib/fa'
 
+// redux
+import { connect } from 'react-redux'
+import {ADD_POST } from '../actions'
+ 
+
+// custom
 import CreateEdit from './CreateEdit'
 import PostDetail from './PostDetail'
 
 
-import { FaArrowLeft } from 'react-icons/lib/fa'
-
-import changeCase from 'change-case'
-
-import { Link, withRouter } from 'react-router-dom'
-
-
-import {
-  ADD_POST,
-} from '../actions'
- 
-
-import { FaPlus, FaSort } from 'react-icons/lib/fa'
-
-import { DropdownButton, MenuItem } from 'react-bootstrap';
 
 class Category extends Component {
 

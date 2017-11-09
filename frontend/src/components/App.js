@@ -1,13 +1,16 @@
+// common packages
 import React, { Component } from 'react';
+
+// redux
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 
-import { initCategories, initPosts, fetchComments } from '../actions'
-
+// css
 import '../App.css';
 
+// custom
+import { initCategories, initPosts, fetchComments } from '../actions'
 import { REACT_APP_BACKEND } from '../utils/api'
-
 import Default from './Default'
 
 

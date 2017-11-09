@@ -1,33 +1,21 @@
+// common
 import React, { Component } from 'react';
-import { connect } from 'react-redux'
 import sortBy from 'sort-by' 
+import { Route, withRouter, Link } from 'react-router-dom'
+import { FaArrowUp, FaArrowDown, FaPencil, FaPlus, FaTrash, FaSort } from 'react-icons/lib/fa'
+import { DropdownButton, MenuItem } from 'react-bootstrap';
+
+// redux
+import { connect } from 'react-redux'
+import {  ADD_COMMENT,  ADD_POST } from '../actions'
 
 import {  downVotePost, upVotePost,  
           downVoteComment, upVoteComment,
           delPost, delComment } from '../actions'
 
-import { Route, withRouter, Link } from 'react-router-dom'
-
+// custom
 import CreateEdit from './CreateEdit'
-
-import {
-  ADD_COMMENT,
-  ADD_POST,
-} from '../actions'
-
-import { FaArrowUp, FaArrowDown, FaPencil, FaPlus, FaTrash, FaSort } from 'react-icons/lib/fa'
-
-import { DropdownButton, MenuItem } from 'react-bootstrap';
-
-
-function displayableDate(timestamp) {
-
-  var newDate = new Date();
-  newDate.setTime(timestamp);
-  
-  return newDate.toUTCString();
-
-}
+import { displayableDate } from '../utils/dates'
 
 class PostDetail extends Component {
 
@@ -85,7 +73,6 @@ class PostDetail extends Component {
               <div className="cone"> 
                   <span className="post-author">{post.author}</span>
                    <Link to={`/${this.props.cat.name}/${post.id}`}><FaPencil className="spacer" /></Link>
-                   <FaPencil  style={{cursor:'pointer'}}  className="spacer" onClick={ () => this.showDialog( ADD_POST, this.props.cat.name, post ) } />
                    <FaTrash  style={{cursor:'pointer'}}  className="spacer" onClick={ () => delPost( post.id ) } />
 
                   <div className="timestamp">{displayableDate(post.timestamp)}</div>
@@ -111,6 +98,7 @@ class PostDetail extends Component {
                         parent = {this}
 
                         isRouter = {true}
+                        history={history}
 
                       /> 
                 )} />

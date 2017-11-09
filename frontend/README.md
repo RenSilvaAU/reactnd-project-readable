@@ -34,7 +34,10 @@ Posts display the number of comments associated with the post.
 
 ## Build status
 
-This is version 0.1 of the app. It is being resubmitted for the first project review.
+This is version 0.2 of the app. It is being resubmitted, after review found the points below were missing:
+
+- All posts for a category are listed at /:category
+- Post detail is available at /:category/:post_id
 
 ## Tech used
 

@@ -1,10 +1,12 @@
-
+// coommon
 import React, { Component } from 'react';
-import { connect } from 'react-redux'
 import { Route, withRouter } from 'react-router-dom'
 
-import Category from './Category'
+// redux
+import { connect } from 'react-redux'
 
+// custom
+import Category from './Category'
 
 
 
@@ -13,9 +15,7 @@ class Default extends Component {
 
 
   state={
-
     selectedCategory : null
-
   }
 
 

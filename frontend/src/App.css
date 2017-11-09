@@ -101,6 +101,10 @@
   color: #d3d3d3;
 }
 
+.gray {
+  color: #d3d3d3;
+  margin-bottom:5px;
+}
 
 .subheader {
   font-size: 30px;
@@ -143,12 +147,21 @@
 .hotTag:hover, a:-webkit-any-link {  
   text-decoration:  none;
 }
-
+a {
+  color: #333 !important;
+}
 .grid-wrapper {
   display: grid;
   grid-template-columns: 1fr 7fr;
   grid-gap: 10px;
 }
+
+.grid-half {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 10px;
+}
+
 .cone {
   grid-column: 1 / 2;
 }

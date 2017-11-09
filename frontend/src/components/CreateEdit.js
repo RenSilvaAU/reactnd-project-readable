@@ -1,17 +1,19 @@
+// coommon
 import React, { Component } from 'react';
-import { connect } from 'react-redux'
 import { Modal, Button } from 'react-bootstrap';
-
 import { withRouter } from 'react-router-dom';
-import {
-  ADD_COMMENT,
-  ADD_POST,
-} from '../actions'
 
+// redux
+import { connect } from 'react-redux'
+import {ADD_COMMENT,  ADD_POST } from '../actions'
 import {  addPost,  
           addComment,
           updatePost,
           updateComment } from '../actions'
+
+// custom
+import { displayableDate} from '../utils/dates'
+
 
 const uuidv1 = require('uuid/v1');
 
@@ -29,15 +31,41 @@ class CreateEdit extends Component {
     modalPost :     this.props.modalPost,
     modalComment :  this.props.modalComment,
 
+
+    modalId :       this.getId( this.props.modalPost, this.props.modalComment),
+    modalTimeStamp : this.getTimeStamp( this.props.modalPost, this.props.modalComment),
+
     modalVoteScore : 1,
 
     modalTitle :    this.getTitle() ,
     modalBody  :    this.getBody()  ,
     modalAuthor :   this.getAuthor(),
 
-    isShowingTitle:  this.props.modalForm === ADD_POST
+    isShowingTitle:  this.props.modalForm === ADD_POST,
+
+    savedHistory : (this.props.isRouter ? this.props.history : null)
 
 
+  }
+
+  getId(post,comment) {
+
+    if (comment) 
+      return comment.id
+    else if (post) 
+      return post.id
+    else 
+      return null
+  }
+
+  getTimeStamp(post,comment) {
+
+     if (comment) 
+      return comment.timestamp
+    else if (post) 
+      return post.timestamp
+    else 
+      return null
   }
 
   getTitle() {
@@ -150,6 +178,10 @@ class CreateEdit extends Component {
 
     if (this.props.modalForm === ADD_POST ) {
         this.postPost();
+
+        if (this.props.isRouter) {
+          this.props.history.go(-1)
+        }
         this.props.parent.hideDialog()
 
     } else if (this.props.modalForm === ADD_COMMENT ) {
@@ -183,9 +215,17 @@ class CreateEdit extends Component {
 
               <Modal.Body>
 
+
+                    <div className="grid-half">
+                      
+                        <div className="cone gray">id: {this.state.modalId === null ? "<new>" : this.state.modalId}</div>
+                        <div className="ctwo gray">Time Stamp: {this.state.modalTimeStamp === null ? "<new>" : displayableDate(this.state.modalTimeStamp)}</div>
+
+                    </div>
                     <input className="inputField" type="text" placeholder="Author" autoFocus
                     value={this.state.modalAuthor}
                     onChange={ (event) => this.setState( { modalAuthor: event.target.value })} />
+
 
                     { this.state.isShowingTitle 
                       ?
@@ -200,7 +240,7 @@ class CreateEdit extends Component {
               </Modal.Body>
 
               <Modal.Footer>
-                <Button onClick={ () => { this.props.parent.hideDialog() } }>Close</Button>
+                <Button onClick={ () => { (this.props.isRouter) ? this.props.history.go(-1) : this.props.parent.hideDialog() } }>Close</Button>
                 <Button type="submit" bsStyle="primary" 
                 onClick={ () => { this.post(this) } 
                }>Post</Button>
