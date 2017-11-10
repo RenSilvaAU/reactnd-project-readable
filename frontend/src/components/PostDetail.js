@@ -91,7 +91,7 @@ class PostDetail extends Component {
 
                 <div>          
                   <Link to={`/${this.props.cat.name}`}><FaArrowLeft className="hotTag"  style={{cursor:'pointer'}} /></Link>
-                   <span className="spacer">Back to all Categories</span>
+                   <span className="spacer">Back to all Posts</span>
                 </div>
 
               }                        
