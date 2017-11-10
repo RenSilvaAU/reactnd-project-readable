@@ -33,6 +33,7 @@ class Default extends Component {
           {categories && categories.filter( (cat) => { return this.state.selectedCategory ? cat.name === this.state.selectedCategory : cat } ).map( (cat) => (
 
             <div key={cat.name}>
+            
               <Route path={`/${cat.name}`}
 
                   render={ ({history}) => ( 

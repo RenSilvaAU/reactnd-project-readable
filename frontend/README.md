@@ -34,10 +34,13 @@ Posts display the number of comments associated with the post.
 
 ## Build status
 
-This is version 0.2 of the app. It is being resubmitted, after review found the points below were missing:
+This is version 0.3 of the app. It is being resubmitted, meeting the speciic requirements of:
 
-- All posts for a category are listed at /:category
-- Post detail is available at /:category/:post_id
+To meet this rubric requirement, you will need to make a Post Detail Page.
+The Post Detail Page should be avaialble at /:category/:post_id and should show all the information that is being shown on the Home and Category Pages but for a specific post.
+The page should display the author, current score, voting mechanism , number of comments for the post and should have buttons for editing and deleting the post.
+It should also have a way to add comments and should show a list with all the comments below the post with each comment displaying author, body, current score, voting mechanism for the comment and buttons for editing anddeleting the comment.
+
 
 ## Tech used
 

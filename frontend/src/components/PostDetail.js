@@ -1,8 +1,8 @@
 // common
 import React, { Component } from 'react';
 import sortBy from 'sort-by' 
-import { Route, withRouter, Link } from 'react-router-dom'
-import { FaArrowUp, FaArrowDown, FaPencil, FaPlus, FaTrash, FaSort } from 'react-icons/lib/fa'
+import { withRouter, Link } from 'react-router-dom'
+import { FaArrowUp, FaArrowDown, FaPencil, FaPlus, FaTrash, FaSort,FaArrowLeft } from 'react-icons/lib/fa'
 import { DropdownButton, MenuItem } from 'react-bootstrap';
 
 // redux
@@ -17,6 +17,7 @@ import {  downVotePost, upVotePost,
 import CreateEdit from './CreateEdit'
 import { displayableDate } from '../utils/dates'
 
+
 class PostDetail extends Component {
 
   state={
@@ -27,7 +28,9 @@ class PostDetail extends Component {
     modalForm : ADD_POST,
     modalCategory : null,
     modalPost : null,
-    modalComment : null
+    modalComment : null,
+
+
   }
 
 
@@ -57,133 +60,128 @@ class PostDetail extends Component {
 
     const { comments,  
             downVotePost, upVotePost,  
-            downVoteComment, upVoteComment, delComment, delPost
+            downVoteComment, upVoteComment, delComment,
+            post, delPost
            } = this.props
 
     const myFaSort =  <FaSort style={{cursor:'pointer'}} className="spacer" /> 
 
-
     return (
-    <div>
-    	{ this.props.catPosts.map( (post) => (
-                         
-          <div key={post.id}>
 
-            <div className="grid-wrapper">
-              <div className="cone"> 
-                  <span className="post-author">{post.author}</span>
-                   <Link to={`/${this.props.cat.name}/${post.id}`}><FaPencil className="spacer" /></Link>
-                   <FaTrash  style={{cursor:'pointer'}}  className="spacer" onClick={ () => delPost( post.id ) } />
+      <div >
 
-                  <div className="timestamp">{displayableDate(post.timestamp)}</div>
+        <div className="grid-wrapper" key = {post.id}>
 
-              </div>
-              <div className="ctwo">
+          <div className="cone"> 
+            <span className="post-author">{post.author}</span>
 
-                <div className="post-title">{post.title}</div>
+            <FaPencil  style={{cursor:'pointer'}}  className="spacer" onClick={ () => this.showDialog( ADD_POST, this.props.cat.name, post ) } />
+            <FaTrash  style={{cursor:'pointer'}}  className="spacer" onClick={ () => delPost( post.id ) } />
 
+            <div className="timestamp">{displayableDate(post.timestamp)}</div>
 
-                <div className="post-body">{post.body}</div>
+          </div>
 
-                <Route path={`/${this.props.cat.name}/${post.id}`}
+          <div className="ctwo">
 
-                    render={ ({history}) => ( 
+            <div>
 
-                      <CreateEdit 
-
-                        modalForm = { ADD_POST}
-                        modalCategory = {this.props.cat.name}
-                        modalPost = {post}
-                        modalComment = "" 
-                        parent = {this}
-
-                        isRouter = {true}
-                        history={history}
-
-                      /> 
-                )} />
+              { this.props.backButton && 
 
 
-
-                <button className="post-voteScore">{post.voteScore} </button>
-                       
-                <FaArrowUp  style={{cursor:'pointer'}}   className="spacer" onClick={ () => upVotePost(post.id) } />
-                <FaArrowDown style={{cursor:'pointer'}}  className="spacer" onClick={ () => downVotePost(post.id) } />
-           
-                <div className="grid-wrapper subSubHead">
-                  <div className="cone">Comments ({this.noOfComments(post.id)})</div>
-                  <div className="ctwo">
-                    <FaPlus style={{cursor:'pointer'}}  className="hotTag"  onClick={ () => this.showDialog( ADD_COMMENT, this.props.cat.name, post ) } />
-
-                    <DropdownButton className="simpleButton" bsStyle="default" title={myFaSort} noCaret id="dropdown-no-caret">
-
-                        <MenuItem eventKey="1" onSelect={ () => this.setState( { commentsOrder: 'timestamp' } ) }>Timestamp</MenuItem>
-                        <MenuItem eventKey="2" onSelect={ () => this.setState( { commentsOrder: '-voteScore' } ) }>Vote Score</MenuItem>
-
-                    </DropdownButton>
-
-                  </div> 
+                <div>          
+                  <Link to={`/${this.props.cat.name}`}><FaArrowLeft className="hotTag"  style={{cursor:'pointer'}} /></Link>
+                   <span className="spacer">Back to all Categories</span>
                 </div>
-                { ( comments && comments.filter( (comment) => (comment.parentId === post.id)).length > 0 ) 
 
-                ? // then
-                (
-                  <div>
+              }                        
 
-                    <div className="comments">
-                    { comments.filter( (comment) => (comment.parentId === post.id)).sort(sortBy(this.state.commentsOrder)).map( (comment) => {
-                      return (
-                        <div className="grid-wrapper" key={comment.id}>
-                          <div className="cone">
-                            <span className="comment-author">{comment.author}</span>
-                            <FaPencil  style={{cursor:'pointer'}}  className="spacer" onClick={ () =>this.showDialog( ADD_COMMENT, this.props.cat.name, post, comment )  } />
-                            <FaTrash  style={{cursor:'pointer'}}  className="spacer" onClick={ () => delComment( comment.id ) } />
+            <Link className="post-title hotTag" 
+                  to={`/${this.props.cat.name}/${post.id}`}>{post.title}</Link>
 
-                            <div className="timestamp">{displayableDate(comment.timestamp)}</div>
 
-                          </div>
-                          <div className="ctwo">
+            <div className="post-body">{post.body}</div>
 
-                             <div className="comment-body">{comment.body}</div>
 
-                                <button className="post-voteScore">{comment.voteScore} </button>
-                                
-                                <FaArrowUp className="spacer" onClick={ () => upVoteComment(comment.id) } />
-                                <FaArrowDown className="spacer" onClick={ () => downVoteComment(comment.id) } />
-                                
-                            </div>
-                            <br />
+            <button className="post-voteScore">{post.voteScore} </button>
+                       
+            <FaArrowUp style={{cursor:'pointer'}}   className="spacer" onClick={ () => upVotePost(post.id) } />
+            <FaArrowDown style={{cursor:'pointer'}}  className="spacer" onClick={ () => downVotePost(post.id) } />
+           
+            <div className="grid-wrapper subSubHead">
+
+              <div className="cone">Comments ({this.noOfComments(post.id)})</div>
+              <div className="ctwo">
+                <FaPlus style={{cursor:'pointer'}}  className="hotTag"  onClick={ () => this.showDialog( ADD_COMMENT, this.props.cat.name, post ) } />
+
+                <DropdownButton className="simpleButton" bsStyle="default" title={myFaSort} noCaret id="dropdown-no-caret">
+
+                  <MenuItem eventKey="1" onSelect={ () => this.setState( { commentsOrder: 'timestamp' } ) }>Timestamp</MenuItem>
+                  <MenuItem eventKey="2" onSelect={ () => this.setState( { commentsOrder: '-voteScore' } ) }>Vote Score</MenuItem>
+
+                </DropdownButton>
+
+              </div> 
+            </div>
+
+            { ( comments && comments.filter( (comment) => (comment.parentId === post.id)).length > 0 ) 
+
+            ? // then
+            (
+              <div>
+
+                <div className="comments">
+                { comments.filter( (comment) => (comment.parentId === post.id)).sort(sortBy(this.state.commentsOrder)).map( (comment) => {
+                  return (
+                    <div className="grid-wrapper" key={comment.id}>
+                      <div className="cone">
+                        <span className="comment-author">{comment.author}</span>
+                        <FaPencil  style={{cursor:'pointer'}}  className="spacer" onClick={ () =>this.showDialog( ADD_COMMENT, this.props.cat.name, post, comment )  } />
+                        <FaTrash  style={{cursor:'pointer'}}  className="spacer" onClick={ () => delComment( comment.id ) } />
+
+                        <div className="timestamp">{displayableDate(comment.timestamp)}</div>
+
+                      </div>
+                      <div className="ctwo">
+
+                         <div className="comment-body">{comment.body}</div>
+
+                            <button className="post-voteScore">{comment.voteScore} </button>
+                            
+                            <FaArrowUp className="spacer" onClick={ () => upVoteComment(comment.id) } />
+                            <FaArrowDown className="spacer" onClick={ () => downVoteComment(comment.id) } />
+                            
                         </div>
-
-                        )
-                      })
-                    }
+                        <br />
                     </div>
-                  </div>
-                  )
-                : null
-              }
 
+              )})}
               </div>
             </div>
-          </div>
-        ))}  
+          )
+                : null
+          }
 
-        {this.state.isShowingDialog ?
+        </div>
+      </div>
+    </div>
 
-          
-          <CreateEdit 
+      
+    {this.state.isShowingDialog ?
 
-            modalForm = {this.state.modalForm}
-            modalCategory = {this.state.modalCategory}
-            modalPost = {this.state.modalPost}
-            modalComment = {this.state.modalComment}
-            parent = {this}
+      
+      <CreateEdit 
 
-          />
+        modalForm = {this.state.modalForm}
+        modalCategory = {this.state.modalCategory}
+        modalPost = {this.state.modalPost}
+        modalComment = {this.state.modalComment}
+        parent = {this}
 
-          : null
-      	}
+      />
+
+      : null
+  	}
 
     </div>
     );

@@ -3,14 +3,15 @@ import React, { Component } from 'react';
 import sortBy from 'sort-by'
 import { FaArrowLeft } from 'react-icons/lib/fa'
 import changeCase from 'change-case'
-import { Link, withRouter } from 'react-router-dom'
+import { Link, Route, withRouter } from 'react-router-dom'
 import { DropdownButton, MenuItem } from 'react-bootstrap';
 import { FaPlus, FaSort } from 'react-icons/lib/fa'
 
+
 // redux
 import { connect } from 'react-redux'
-import {ADD_POST } from '../actions'
- 
+import { ADD_POST } from '../actions'
+
 
 // custom
 import CreateEdit from './CreateEdit'
@@ -27,7 +28,10 @@ class Category extends Component {
     modalCategory : null,
     modalPost : null,
     modalComment : null,
-    postOrder: '-voteScore'
+    postOrder: '-voteScore',
+
+
+    selectedPost : null
 
 
   }
@@ -58,7 +62,7 @@ class Category extends Component {
 
 
             <div>          
-            <Link to="/"><FaArrowLeft className="hotTag"  style={{cursor:'pointer'}} /></Link>
+              <Link to="/"><FaArrowLeft className="hotTag"  style={{cursor:'pointer'}} /></Link>
               <span className="spacer">Back to all Categories</span>
             </div>
 
@@ -88,16 +92,72 @@ class Category extends Component {
                 
               { (posts && posts.filter( (post) => (post.category === this.props.cat.name)).length > 0 )
 
-                    ? // then
-                    <PostDetail 
+                  ? // then
 
-                      catPosts = {posts.filter( (post) => (post.category === this.props.cat.name)).sort(sortBy(this.state.postsOrder))}
-                      cat = {this.props.cat}
-                      parentComponent = {this}
+                  posts.filter( (post) => (post.category === this.props.cat.name)).sort(sortBy(this.state.postsOrder)).filter( (post) => { return this.state.selectedPost ? post.id === this.state.selectedPost : post } ).map( (post) => (
 
-                    />
 
-                    : null
+                    <div key={post.id}>
+
+                      <Route path={`/${this.props.cat.name}/${post.id}`}
+
+
+                        render={ ({history}) => {
+          
+                          return (                        
+
+                            <PostDetail 
+                              
+                              post = {post}
+                              cat = {this.props.cat}
+                              parentComponent = {this}
+                              history = {history}
+                              backButton = {true}
+
+                            />
+ 
+
+                          )
+
+                      }} />
+
+                       <Route exact path="/"
+
+                          render={ ({history}) => ( 
+
+                            <PostDetail 
+                              
+                              post = {post}
+                              cat = {this.props.cat}
+                              parentComponent = {this}
+                              history = {history}
+                              backButton = {false}
+
+                            />
+
+                       )} />                     
+
+                       <Route exact path={`/${this.props.cat.name}`}
+                       
+                          render={ ({history}) => ( 
+
+                            <PostDetail 
+                              
+                              post = {post}
+                              cat = {this.props.cat}
+                              parentComponent = {this}
+                              history = {history}
+                              backButton = {false}
+
+                            />
+
+                       )} />  
+                      </div>
+
+                      ))
+
+
+                  : null
               }
 
             </div>

@@ -141,7 +141,7 @@
 }
 
 .hotTag {
-  color: #33C4FF;
+  color: #33C4FF !important;
 }
 
 .hotTag:hover, a:-webkit-any-link {  
